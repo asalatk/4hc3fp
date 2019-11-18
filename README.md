@@ -12,8 +12,9 @@ If you want to contribute your changes back to the main ShapeCreator, say so in 
 
 # Installing Dependencies:
 
-elm init
-elm install MacCASOutreach/graphicsvg
+```elm init```
+
+```elm install MacCASOutreach/graphicsvg```
 
 # Building:
 
