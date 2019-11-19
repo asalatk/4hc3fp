@@ -1,4 +1,5 @@
 # For WaveCreator Assignment.
+Boot time!
 
 You should modify SinCreator.elm.
 
