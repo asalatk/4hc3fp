@@ -6900,13 +6900,11 @@ var author$project$Main$pageGettingStarted = function (model) {
 		]);
 };
 var elm$html$Html$h1 = _VirtualDom_node('h1');
-var elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
+var elm$virtual_dom$VirtualDom$node = function (tag) {
+	return _VirtualDom_node(
+		_VirtualDom_noScript(tag));
 };
-var elm$html$Html$a = _VirtualDom_node('a');
+var elm$html$Html$node = elm$virtual_dom$VirtualDom$node;
 var elm$virtual_dom$VirtualDom$attribute = F2(
 	function (key, value) {
 		return A2(
@@ -6915,6 +6913,13 @@ var elm$virtual_dom$VirtualDom$attribute = F2(
 			_VirtualDom_noJavaScriptOrHtmlUri(value));
 	});
 var elm$html$Html$Attributes$attribute = elm$virtual_dom$VirtualDom$attribute;
+var elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var elm$html$Html$a = _VirtualDom_node('a');
 var rundis$elm_bootstrap$Bootstrap$Button$linkButton = F2(
 	function (options, children) {
 		return A2(
@@ -8132,6 +8137,24 @@ var author$project$Main$pageHome = function (model) {
 											[
 												elm$html$Html$text('Getting started is real easy. Just click the start button.')
 											])),
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												A3(
+												elm$html$Html$node,
+												'font',
+												_List_fromArray(
+													[
+														A2(elm$html$Html$Attributes$attribute, 'size', '6')
+													]),
+												_List_fromArray(
+													[
+														elm$html$Html$text('∫')
+													])),
+												elm$html$Html$text(' (x * x+1)')
+											])),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
 											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
@@ -8154,12 +8177,18 @@ var author$project$Main$pageHome = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text('Getting started')
+											elm$html$Html$text('Question 1')
 										]),
 									rundis$elm_bootstrap$Bootstrap$Card$config(
 										_List_fromArray(
 											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
-						])),
+						]))
+				])),
+			A2(
+			rundis$elm_bootstrap$Bootstrap$Grid$row,
+			_List_Nil,
+			_List_fromArray(
+				[
 					A2(
 					rundis$elm_bootstrap$Bootstrap$Grid$col,
 					_List_Nil,
@@ -8200,7 +8229,7 @@ var author$project$Main$pageHome = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text('Modules')
+											elm$html$Html$text('Question 2')
 										]),
 									rundis$elm_bootstrap$Bootstrap$Card$config(
 										_List_fromArray(

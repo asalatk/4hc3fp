@@ -179,9 +179,10 @@ pageHome model =
     , Grid.row []
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Getting started" ]
+                |> Card.headerH4 [] [ text "Question 1" ]
                 |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ],
+                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
                     , Block.custom <|
                         Button.linkButton
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
@@ -189,9 +190,11 @@ pageHome model =
                     ]
                 |> Card.view
             ]
-        , Grid.col []
+        ]
+    , Grid.row []
+        [ Grid.col []
             [ Card.config [ Card.outlineDanger ]
-                |> Card.headerH4 [] [ text "Modules" ]
+                |> Card.headerH4 [] [ text "Question 2" ]
                 |> Card.block []
                     [ Block.text [] [ text "Check out the modules overview" ]
                     , Block.custom <|
