@@ -1,23 +1,14 @@
-# For WaveCreator Assignment.
+# Bootstrap Time! 
+Boot time!
 
-You should modify SinCreator.elm.
+Steps:
+* Modify ```src/Main.elm```. Currently this contains code which gets rendered as bootstrap.
+* Once done making changes, run ```make.sh```, which compiles the ```Main.elm``` into ```main.js``` that is used in ```index.html``` to render the compiled code.
+* Use ```elm reactor``` and open up index.html.
+* Continue making changess 
 
-It is called from Main.elm, but do not modify Main.elm.  Your submission must compile against the existing modules, with your new SinCreator.elm dropped in.
-
-Other modules can be referred to as examples.
-
-Submit your code on Avenue, with your names and student numbers.
-
-If you want to contribute your changes back to the main ShapeCreator, say so in a comment at the top of your module.
-
-# Installing Dependencies:
-
-```elm init```
-
-```elm install MacCASOutreach/graphicsvg```
 
 # Building:
 
-elm make src/Main.elm
-
+Just run ```make.sh``` when you're done making changes in ```Main.elm```
 
