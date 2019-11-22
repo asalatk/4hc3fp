@@ -8102,21 +8102,6 @@ var rundis$elm_bootstrap$Bootstrap$Grid$row = F2(
 			rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes(options),
 			A2(elm$core$List$map, rundis$elm_bootstrap$Bootstrap$Grid$renderCol, cols));
 	});
-var rundis$elm_bootstrap$Bootstrap$General$Internal$SM = {$: 'SM'};
-var rundis$elm_bootstrap$Bootstrap$Grid$Internal$Bottom = {$: 'Bottom'};
-var rundis$elm_bootstrap$Bootstrap$Grid$Internal$RowVAlign = function (a) {
-	return {$: 'RowVAlign', a: a};
-};
-var rundis$elm_bootstrap$Bootstrap$Grid$Internal$VAlign = F2(
-	function (screenSize, align) {
-		return {align: align, screenSize: screenSize};
-	});
-var rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowVAlign = F2(
-	function (size, align) {
-		return rundis$elm_bootstrap$Bootstrap$Grid$Internal$RowVAlign(
-			A2(rundis$elm_bootstrap$Bootstrap$Grid$Internal$VAlign, size, align));
-	});
-var rundis$elm_bootstrap$Bootstrap$Grid$Row$bottomSm = A2(rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowVAlign, rundis$elm_bootstrap$Bootstrap$General$Internal$SM, rundis$elm_bootstrap$Bootstrap$Grid$Internal$Bottom);
 var author$project$Main$pageHome = function (model) {
 	return _List_fromArray(
 		[
@@ -8129,8 +8114,7 @@ var author$project$Main$pageHome = function (model) {
 				])),
 			A2(
 			rundis$elm_bootstrap$Bootstrap$Grid$row,
-			_List_fromArray(
-				[rundis$elm_bootstrap$Bootstrap$Grid$Row$bottomSm]),
+			_List_Nil,
 			_List_fromArray(
 				[
 					A2(
@@ -8919,6 +8903,7 @@ var rundis$elm_bootstrap$Bootstrap$Navbar$sizeToComparable = function (size) {
 	}
 };
 var rundis$elm_bootstrap$Bootstrap$General$Internal$MD = {$: 'MD'};
+var rundis$elm_bootstrap$Bootstrap$General$Internal$SM = {$: 'SM'};
 var rundis$elm_bootstrap$Bootstrap$General$Internal$XL = {$: 'XL'};
 var rundis$elm_bootstrap$Bootstrap$Navbar$toScreenSize = function (windowWidth) {
 	return (windowWidth <= 576) ? rundis$elm_bootstrap$Bootstrap$General$Internal$XS : ((windowWidth <= 768) ? rundis$elm_bootstrap$Bootstrap$General$Internal$SM : ((windowWidth <= 992) ? rundis$elm_bootstrap$Bootstrap$General$Internal$MD : ((windowWidth <= 1200) ? rundis$elm_bootstrap$Bootstrap$General$Internal$LG : rundis$elm_bootstrap$Bootstrap$General$Internal$XL)));

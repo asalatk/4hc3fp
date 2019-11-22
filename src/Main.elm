@@ -178,7 +178,7 @@ mainContent model =
 pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text "Home" ]
-    , Grid.row [ Row.bottomSm ]
+    , Grid.row []
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ text "Question 1" ]
