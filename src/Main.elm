@@ -173,6 +173,7 @@ mainContent model =
                 pageNotFound
 
 
+
 pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text "Home" ]
