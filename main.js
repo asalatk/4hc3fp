@@ -6899,6 +6899,7 @@ var author$project$Main$pageGettingStarted = function (model) {
 				]))
 		]);
 };
+var elm$html$Html$br = _VirtualDom_node('br');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
 var elm$virtual_dom$VirtualDom$node = function (tag) {
 	return _VirtualDom_node(
@@ -7150,9 +7151,6 @@ var rundis$elm_bootstrap$Bootstrap$Card$Internal$Coloring = function (a) {
 var rundis$elm_bootstrap$Bootstrap$Card$Internal$Outlined = function (a) {
 	return {$: 'Outlined', a: a};
 };
-var rundis$elm_bootstrap$Bootstrap$Internal$Role$Danger = {$: 'Danger'};
-var rundis$elm_bootstrap$Bootstrap$Card$outlineDanger = rundis$elm_bootstrap$Bootstrap$Card$Internal$Coloring(
-	rundis$elm_bootstrap$Bootstrap$Card$Internal$Outlined(rundis$elm_bootstrap$Bootstrap$Internal$Role$Danger));
 var rundis$elm_bootstrap$Bootstrap$Internal$Role$Primary = {$: 'Primary'};
 var rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary = rundis$elm_bootstrap$Bootstrap$Card$Internal$Coloring(
 	rundis$elm_bootstrap$Bootstrap$Card$Internal$Outlined(rundis$elm_bootstrap$Bootstrap$Internal$Role$Primary));
@@ -8104,6 +8102,21 @@ var rundis$elm_bootstrap$Bootstrap$Grid$row = F2(
 			rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes(options),
 			A2(elm$core$List$map, rundis$elm_bootstrap$Bootstrap$Grid$renderCol, cols));
 	});
+var rundis$elm_bootstrap$Bootstrap$General$Internal$SM = {$: 'SM'};
+var rundis$elm_bootstrap$Bootstrap$Grid$Internal$Bottom = {$: 'Bottom'};
+var rundis$elm_bootstrap$Bootstrap$Grid$Internal$RowVAlign = function (a) {
+	return {$: 'RowVAlign', a: a};
+};
+var rundis$elm_bootstrap$Bootstrap$Grid$Internal$VAlign = F2(
+	function (screenSize, align) {
+		return {align: align, screenSize: screenSize};
+	});
+var rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowVAlign = F2(
+	function (size, align) {
+		return rundis$elm_bootstrap$Bootstrap$Grid$Internal$RowVAlign(
+			A2(rundis$elm_bootstrap$Bootstrap$Grid$Internal$VAlign, size, align));
+	});
+var rundis$elm_bootstrap$Bootstrap$Grid$Row$bottomSm = A2(rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowVAlign, rundis$elm_bootstrap$Bootstrap$General$Internal$SM, rundis$elm_bootstrap$Bootstrap$Grid$Internal$Bottom);
 var author$project$Main$pageHome = function (model) {
 	return _List_fromArray(
 		[
@@ -8114,6 +8127,94 @@ var author$project$Main$pageHome = function (model) {
 				[
 					elm$html$Html$text('Home')
 				])),
+			A2(
+			rundis$elm_bootstrap$Bootstrap$Grid$row,
+			_List_fromArray(
+				[rundis$elm_bootstrap$Bootstrap$Grid$Row$bottomSm]),
+			_List_fromArray(
+				[
+					A2(
+					rundis$elm_bootstrap$Bootstrap$Grid$col,
+					_List_Nil,
+					_List_fromArray(
+						[
+							rundis$elm_bootstrap$Bootstrap$Card$view(
+							A3(
+								rundis$elm_bootstrap$Bootstrap$Card$block,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Getting started is real easy. Just click the start button.')
+											])),
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												A3(
+												elm$html$Html$node,
+												'font',
+												_List_fromArray(
+													[
+														A2(elm$html$Html$Attributes$attribute, 'size', '6')
+													]),
+												_List_fromArray(
+													[
+														elm$html$Html$text('∫')
+													])),
+												elm$html$Html$text(' (x * x+1)')
+											])),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Attributes$href('#getting-started')
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Start')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$ShowModal)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('testst')
+												])))
+									]),
+								A3(
+									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+									_List_Nil,
+									_List_fromArray(
+										[
+											elm$html$Html$text('Question 1')
+										]),
+									rundis$elm_bootstrap$Bootstrap$Card$config(
+										_List_fromArray(
+											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
+						]))
+				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil),
 			A2(
 			rundis$elm_bootstrap$Bootstrap$Grid$row,
 			_List_Nil,
@@ -8170,6 +8271,22 @@ var author$project$Main$pageHome = function (model) {
 											_List_fromArray(
 												[
 													elm$html$Html$text('Start')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$ShowModal)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('testst')
 												])))
 									]),
 								A3(
@@ -8177,13 +8294,275 @@ var author$project$Main$pageHome = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text('Question 1')
+											elm$html$Html$text('Question 2')
 										]),
 									rundis$elm_bootstrap$Bootstrap$Card$config(
 										_List_fromArray(
 											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
 						]))
 				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil),
+			A2(
+			rundis$elm_bootstrap$Bootstrap$Grid$row,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					rundis$elm_bootstrap$Bootstrap$Grid$col,
+					_List_Nil,
+					_List_fromArray(
+						[
+							rundis$elm_bootstrap$Bootstrap$Card$view(
+							A3(
+								rundis$elm_bootstrap$Bootstrap$Card$block,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Getting started is real easy. Just click the start button.')
+											])),
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												A3(
+												elm$html$Html$node,
+												'font',
+												_List_fromArray(
+													[
+														A2(elm$html$Html$Attributes$attribute, 'size', '6')
+													]),
+												_List_fromArray(
+													[
+														elm$html$Html$text('∫')
+													])),
+												elm$html$Html$text(' (x * x+1)')
+											])),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Attributes$href('#getting-started')
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Start')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$ShowModal)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('testst')
+												])))
+									]),
+								A3(
+									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+									_List_Nil,
+									_List_fromArray(
+										[
+											elm$html$Html$text('Question 3')
+										]),
+									rundis$elm_bootstrap$Bootstrap$Card$config(
+										_List_fromArray(
+											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
+						]))
+				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil),
+			A2(
+			rundis$elm_bootstrap$Bootstrap$Grid$row,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					rundis$elm_bootstrap$Bootstrap$Grid$col,
+					_List_Nil,
+					_List_fromArray(
+						[
+							rundis$elm_bootstrap$Bootstrap$Card$view(
+							A3(
+								rundis$elm_bootstrap$Bootstrap$Card$block,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Getting started is real easy. Just click the start button.')
+											])),
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												A3(
+												elm$html$Html$node,
+												'font',
+												_List_fromArray(
+													[
+														A2(elm$html$Html$Attributes$attribute, 'size', '6')
+													]),
+												_List_fromArray(
+													[
+														elm$html$Html$text('∫')
+													])),
+												elm$html$Html$text(' (x * x+1)')
+											])),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Attributes$href('#getting-started')
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Start')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$ShowModal)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('testst')
+												])))
+									]),
+								A3(
+									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+									_List_Nil,
+									_List_fromArray(
+										[
+											elm$html$Html$text('Question 4')
+										]),
+									rundis$elm_bootstrap$Bootstrap$Card$config(
+										_List_fromArray(
+											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
+						]))
+				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil),
+			A2(
+			rundis$elm_bootstrap$Bootstrap$Grid$row,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					rundis$elm_bootstrap$Bootstrap$Grid$col,
+					_List_Nil,
+					_List_fromArray(
+						[
+							rundis$elm_bootstrap$Bootstrap$Card$view(
+							A3(
+								rundis$elm_bootstrap$Bootstrap$Card$block,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('Getting started is real easy. Just click the start button.')
+											])),
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												A3(
+												elm$html$Html$node,
+												'font',
+												_List_fromArray(
+													[
+														A2(elm$html$Html$Attributes$attribute, 'size', '6')
+													]),
+												_List_fromArray(
+													[
+														elm$html$Html$text('∫')
+													])),
+												elm$html$Html$text(' (x * x+1)')
+											])),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Attributes$href('#getting-started')
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Start')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$primary,
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$ShowModal)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('testst')
+												])))
+									]),
+								A3(
+									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+									_List_Nil,
+									_List_fromArray(
+										[
+											elm$html$Html$text('Question 5')
+										]),
+									rundis$elm_bootstrap$Bootstrap$Card$config(
+										_List_fromArray(
+											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
+						]))
+				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil),
 			A2(
 			rundis$elm_bootstrap$Bootstrap$Grid$row,
 			_List_Nil,
@@ -8229,11 +8608,11 @@ var author$project$Main$pageHome = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text('Question 2')
+											elm$html$Html$text('TESTQuestion 2')
 										]),
 									rundis$elm_bootstrap$Bootstrap$Card$config(
 										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlineDanger])))))
+											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
 						]))
 				]))
 		]);
@@ -8540,7 +8919,6 @@ var rundis$elm_bootstrap$Bootstrap$Navbar$sizeToComparable = function (size) {
 	}
 };
 var rundis$elm_bootstrap$Bootstrap$General$Internal$MD = {$: 'MD'};
-var rundis$elm_bootstrap$Bootstrap$General$Internal$SM = {$: 'SM'};
 var rundis$elm_bootstrap$Bootstrap$General$Internal$XL = {$: 'XL'};
 var rundis$elm_bootstrap$Bootstrap$Navbar$toScreenSize = function (windowWidth) {
 	return (windowWidth <= 576) ? rundis$elm_bootstrap$Bootstrap$General$Internal$XS : ((windowWidth <= 768) ? rundis$elm_bootstrap$Bootstrap$General$Internal$SM : ((windowWidth <= 992) ? rundis$elm_bootstrap$Bootstrap$General$Internal$MD : ((windowWidth <= 1200) ? rundis$elm_bootstrap$Bootstrap$General$Internal$LG : rundis$elm_bootstrap$Bootstrap$General$Internal$XL)));

@@ -10,6 +10,7 @@ import Url.Parser as UrlParser exposing ((</>), Parser, s, top)
 import Bootstrap.Navbar as Navbar
 import Bootstrap.Grid as Grid
 import Bootstrap.Grid.Col as Col
+import Bootstrap.Grid.Row as Row
 import Bootstrap.Card as Card
 import Bootstrap.Card.Block as Block
 import Bootstrap.Button as Button
@@ -177,25 +178,110 @@ mainContent model =
 pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text "Home" ]
-    , Grid.row []
+    , Grid.row [ Row.bottomSm ]
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ text "Question 1" ]
                 |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ],
+                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.custom <|
+                    , 
+                    Block.custom <|
                         Button.linkButton
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
                             [ text "Start" ]
+                    ,
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
                     ]
                 |> Card.view
             ]
         ]
+    , br [] []
     , Grid.row []
         [ Grid.col []
-            [ Card.config [ Card.outlineDanger ]
+            [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ text "Question 2" ]
+                |> Card.block []
+                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    ,
+                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    , 
+                    Block.custom <|
+                        Button.linkButton
+                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
+                            [ text "Start" ]
+                    ,
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    ]
+                |> Card.view
+            ]
+        ]
+    , br [] []
+    , Grid.row []
+        [ Grid.col []
+            [ Card.config [ Card.outlinePrimary ]
+                |> Card.headerH4 [] [ text "Question 3" ]
+                |> Card.block []
+                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    ,
+                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    , 
+                    Block.custom <|
+                        Button.linkButton
+                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
+                            [ text "Start" ]
+                    ,
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    ]
+                |> Card.view
+            ]
+        ]
+    , br [] []
+    , Grid.row []
+        [ Grid.col []
+            [ Card.config [ Card.outlinePrimary ]
+                |> Card.headerH4 [] [ text "Question 4" ]
+                |> Card.block []
+                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    ,
+                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    , 
+                    Block.custom <|
+                        Button.linkButton
+                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
+                            [ text "Start" ]
+                    ,
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    ]
+                |> Card.view
+            ]
+        ]
+    , br [] []
+    , Grid.row []
+        [ Grid.col []
+            [ Card.config [ Card.outlinePrimary ]
+                |> Card.headerH4 [] [ text "Question 5" ]
+                |> Card.block []
+                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    ,
+                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    , 
+                    Block.custom <|
+                        Button.linkButton
+                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
+                            [ text "Start" ]
+                    ,
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    ]
+                |> Card.view
+            ]
+        ]
+    , br [] []    
+    , Grid.row []
+        [ Grid.col []
+            [ Card.config [ Card.outlinePrimary ]
+                |> Card.headerH4 [] [ text "TESTQuestion 2" ]
                 |> Card.block []
                     [ Block.text [] [ text "Check out the modules overview" ]
                     , Block.custom <|
