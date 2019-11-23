@@ -16,6 +16,8 @@ import Bootstrap.Card.Block as Block
 import Bootstrap.Button as Button
 import Bootstrap.ListGroup as Listgroup
 import Bootstrap.Modal as Modal
+import Bootstrap.Form.Radio as Radio
+
 
 
 type alias Flags =
@@ -26,12 +28,16 @@ type alias Model =
     , page : Page
     , navState : Navbar.State
     , modalVisibility : Modal.Visibility
+    , currentQuestion: Int
+    , lastSubmittedAnswer: Int
+   
     }
 
 type Page
     = Home
-    | GettingStarted
-    | Modules
+    | IntegrationByParts
+    | USubstitution
+    | PartialFractionDecomp
     | NotFound
 
 
@@ -53,7 +59,7 @@ init flags url key =
             Navbar.initialState NavMsg
 
         ( model, urlCmd ) =
-            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden }
+            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, currentQuestion = 1, lastSubmittedAnswer =0 }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
 
@@ -65,7 +71,10 @@ type Msg
     | ClickedLink UrlRequest
     | NavMsg Navbar.State
     | CloseModal
-    | ShowModal
+    | ShowModal Int
+    | UpdateLastSubmittedAnswer Int
+    | UpdateQuestion Int
+   
 
 
 subscriptions : Model -> Sub Msg
@@ -98,13 +107,20 @@ update msg model =
             , Cmd.none
             )
 
-        ShowModal ->
-            ( { model | modalVisibility = Modal.shown }
+        ShowModal qNum ->
+            ( { model | modalVisibility = checkIfCorrectAnswer model}
             , Cmd.none
             )
 
+        UpdateLastSubmittedAnswer answer -> ({model | lastSubmittedAnswer = answer}
+            , Cmd.none)
+
+        UpdateQuestion qNum -> ({model | currentQuestion = qNum}
+            , Cmd.none)
+   
 
 
+checkIfCorrectAnswer model = if model.lastSubmittedAnswer ==1 then Modal.shown else Modal.hidden
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
 urlUpdate url model =
     case decode url of
@@ -125,14 +141,15 @@ routeParser : Parser (Page -> a) a
 routeParser =
     UrlParser.oneOf
         [ UrlParser.map Home top
-        , UrlParser.map GettingStarted (s "getting-started")
-        , UrlParser.map Modules (s "modules")
+        , UrlParser.map IntegrationByParts (s "IntegrationByParts")
+        , UrlParser.map USubstitution (s "USubstitution")
+        , UrlParser.map PartialFractionDecomp (s "PartialFractionDecomp")
         ]
 
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "Elm Bootstrap"
+    { title = "Welcome"
     , body =
         [ div []
             [ menu model
@@ -151,8 +168,9 @@ menu model =
         |> Navbar.container
         |> Navbar.brand [ href "#" ] [ text "Elm Bootstrap" ]
         |> Navbar.items
-            [ Navbar.itemLink [ href "#getting-started" ] [ text "Getddddtingggggg started" ]
-            , Navbar.itemLink [ href "#modules" ] [ text "Moduledddds" ]
+            [ Navbar.itemLink [ href "#IntegrationByParts" ] [ text "Integration By Parts" ]
+            , Navbar.itemLink [ href "#USubstitution" ] [ text "U Subsitution" ]
+              , Navbar.itemLink [ href "#PartialFractionDecomp" ] [ text "Partial Fraction Decomposition" ]
             ]
         |> Navbar.view model.navState
 
@@ -164,35 +182,54 @@ mainContent model =
             Home ->
                 pageHome model
 
-            GettingStarted ->
-                pageGettingStarted model
+            IntegrationByParts ->
+                integrationByPartsPage model
 
-            Modules ->
-                pageModules model
+            USubstitution ->
+                uSubstitutionPage model
 
+            PartialFractionDecomp -> pageNotFound
             NotFound ->
                 pageNotFound
 
-
-
 pageHome : Model -> List (Html Msg)
 pageHome model =
-    [ h1 [] [ text "Home" ]
+    [ h1 [] [ text "Click on an integration technique you want to learn today." ]]
+
+integrationByPartsPage : Model -> List (Html Msg)
+integrationByPartsPage model =
+    [ h1 [] [ text "Let's work through an example..." ]
     , Grid.row []
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ text "Question 1" ]
                 |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    [ Block.text [] [ text "Geng started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
                     , 
-                    Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    Block.custom <| Radio.custom
+    [ Radio.id "myCustomRadio"
+    , Radio.checked True
+    , Radio.name "ibpq1"
+    , Radio.onClick (UpdateLastSubmittedAnswer 1)
+   
+    ] "Option 1"
+    , Block.custom <| Radio.custom
+    [ Radio.id "myCustomRadio2"
+    , Radio.checked False
+    , Radio.name "ibpq1"
+    , Radio.onClick (UpdateLastSubmittedAnswer 2)
+   
+    ] "Option 2"
+    , Block.custom <| Radio.custom
+    [ Radio.id "myCustomRadio3"
+    , Radio.checked False
+    , Radio.name "ibpq1"
+    , Radio.onClick (UpdateLastSubmittedAnswer 3)
+    ] "Option 3",
+                   
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 2)] ] [text "Submit"]
                     ]
                 |> Card.view
             ]
@@ -212,7 +249,7 @@ pageHome model =
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
                             [ text "Start" ]
                     ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "Submit"]
                     ]
                 |> Card.view
             ]
@@ -232,7 +269,7 @@ pageHome model =
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
                             [ text "Start" ]
                     ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "testst"]
                     ]
                 |> Card.view
             ]
@@ -252,7 +289,7 @@ pageHome model =
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
                             [ text "Start" ]
                     ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "testst"]
                     ]
                 |> Card.view
             ]
@@ -272,7 +309,7 @@ pageHome model =
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
                             [ text "Start" ]
                     ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1) ] ] [text "Submit"]
                     ]
                 |> Card.view
             ]
@@ -302,10 +339,11 @@ pageGettingStarted model =
         [ Button.success
         , Button.large
         , Button.block
-        , Button.attrs [ onClick ShowModal ]
+        , Button.attrs [ onClick (ShowModal 1) ]
         ]
         [ text "Click me" ]
     ]
+
 
 
 pageModules : Model -> List (Html Msg)
@@ -318,6 +356,15 @@ pageModules model =
         ]
     ]
 
+uSubstitutionPage : Model -> List (Html Msg)
+uSubstitutionPage model =
+    [ h1 [] [ text "Modules" ]
+    , Listgroup.ul
+        [ Listgroup.li [] [ text "Alert" ]
+        , Listgroup.li [] [ text "Badge" ]
+        , Listgroup.li [] [ text "Card" ]
+        ]
+    ]
 
 pageNotFound : List (Html Msg)
 pageNotFound =
@@ -326,21 +373,12 @@ pageNotFound =
     ]
 
 
+
 modal : Model -> Html Msg
 modal model =
     Modal.config CloseModal
         |> Modal.small
-        |> Modal.h4 [] [ text "Getting started ?" ]
-        |> Modal.body []
-            [ Grid.containerFluid []
-                [ Grid.row []
-                    [ Grid.col
-                        [ Col.xs6 ]
-                        [ text "Col 1" ]
-                    , Grid.col
-                        [ Col.xs6 ]
-                        [ text "Col 2" ]
-                    ]
-                ]
-            ]
+        |> Modal.h4 [] [ text "You got that one wrong. Click next to try again." ]
+
+           
         |> Modal.view model.modalVisibility
