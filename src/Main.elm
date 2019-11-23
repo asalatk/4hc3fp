@@ -16,6 +16,7 @@ import Bootstrap.Card.Block as Block
 import Bootstrap.Button as Button
 import Bootstrap.ListGroup as Listgroup
 import Bootstrap.Modal as Modal
+import Bootstrap.Alert as Alert
 
 
 type alias Flags =
@@ -26,6 +27,11 @@ type alias Model =
     , page : Page
     , navState : Navbar.State
     , modalVisibility : Modal.Visibility
+    , question1 : Int
+    , question2 : Int
+    , question3 : Int
+    , question4 : Int
+    , question5 : Int
     }
 
 type Page
@@ -53,7 +59,7 @@ init flags url key =
             Navbar.initialState NavMsg
 
         ( model, urlCmd ) =
-            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden }
+            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1 }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
 
@@ -66,6 +72,11 @@ type Msg
     | NavMsg Navbar.State
     | CloseModal
     | ShowModal
+    | Question1 Int
+    | Question2 Int
+    | Question3 Int
+    | Question4 Int
+    | Question5 Int
 
 
 subscriptions : Model -> Sub Msg
@@ -103,6 +114,30 @@ update msg model =
             , Cmd.none
             )
 
+        Question1 value ->
+            ( { model | question1 = value }
+            , Cmd.none
+            )
+
+        Question2 value ->
+            ( { model | question2 = value }
+            , Cmd.none
+            )
+
+        Question3 value ->
+            ( { model | question3 = value }
+            , Cmd.none
+            )
+
+        Question4 value ->
+            ( { model | question4 = value }
+            , Cmd.none
+            )
+
+        Question5 value ->
+            ( { model | question5 = value }
+            , Cmd.none
+            )
 
 
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
@@ -173,7 +208,15 @@ mainContent model =
             NotFound ->
                 pageNotFound
 
-
+questionFeedback1 : Model -> Html Msg
+questionFeedback1 model = 
+    if model.question1 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question1 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+        
 
 pageHome : Model -> List (Html Msg)
 pageHome model =
@@ -183,16 +226,25 @@ pageHome model =
             [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ text "Question 1" ]
                 |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
+                    [ Block.text [] [ text "Add some question here" ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    {--
                     , 
                     Block.custom <|
                         Button.linkButton
                             [ Button.primary, Button.attrs [ href "#getting-started" ] ]
                             [ text "Start" ]
-                    ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick ShowModal ] ] [text "testst"]
+                    --}
+                    , Block.text [] [ text "a) option1" ]
+                    , Block.text [] [ text "b) option2" ]
+                    , Block.text [] [ text "c) option3" ]
+                    , Block.text [] [ text "d) option4" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "Correct ans"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
+                    , Block.custom <| questionFeedback1 model
                     ]
                 |> Card.view
             ]
