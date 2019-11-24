@@ -248,8 +248,43 @@ questionFeedback1 model =
         Alert.simpleDanger  [] [ text "Incorrect"]
     else 
         div [] []
-        
 get n xs = List.head (List.drop n xs)
+questionFeedback2 : Model -> Html Msg
+questionFeedback2 model = 
+    if model.question2 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question2 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+questionFeedback3 : Model -> Html Msg
+questionFeedback3 model = 
+    if model.question3 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question3 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+questionFeedback4 : Model -> Html Msg
+questionFeedback4 model = 
+    if model.question4 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question4 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+questionFeedback5 : Model -> Html Msg
+questionFeedback5 model = 
+    if model.question5 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question5 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []        
+
 pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text "Click on an integration technique you want to learn today." ]]
@@ -274,10 +309,10 @@ integrationByPartsPage model =
                     , Block.text [] [ text "b) option2" ]
                     , Block.text [] [ text "c) option3" ]
                     , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "Correct ans"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "A"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "B"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "C"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "D"]
                     , Block.custom <| questionFeedback1 model 
                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
                     ]
