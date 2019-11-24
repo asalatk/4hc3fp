@@ -285,16 +285,11 @@ integrationByPartsPage model =
                 |> Card.headerH4 [] [ text "Question 1" ]
                 |> Card.block []
                     [ Block.text [] [ text "Add some question here" ]
-                    ,
-                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.text [] [ text "a) option1" ]
-                    , Block.text [] [ text "b) option2" ]
-                    , Block.text [] [ text "c) option3" ]
-                    , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "A"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "B"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "C"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "D"]
+                    , Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
                     , Block.custom <| questionFeedback1 model
                     ]
                 |> Card.view
@@ -309,14 +304,10 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.text [] [ text "a) option1" ]
-                    , Block.text [] [ text "b) option2" ]
-                    , Block.text [] [ text "c) option3" ]
-                    , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 1 ) ] ] [text "A"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 0 ) ] ] [text "B"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 0 ) ] ] [text "C"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 0 ) ] ] [text "D"]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
                     , Block.custom <| questionFeedback2 model
                     ]
                 |> Card.view
@@ -331,14 +322,10 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.text [] [ text "a) option1" ]
-                    , Block.text [] [ text "b) option2" ]
-                    , Block.text [] [ text "c) option3" ]
-                    , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 1 ) ] ] [text "A"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 0 ) ] ] [text "B"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 0 ) ] ] [text "C"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 0 ) ] ] [text "D"]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
                     , Block.custom <| questionFeedback3 model
                     ]
                 |> Card.view
@@ -353,14 +340,10 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.text [] [ text "a) option1" ]
-                    , Block.text [] [ text "b) option2" ]
-                    , Block.text [] [ text "c) option3" ]
-                    , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 1 ) ] ] [text "A"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 0 ) ] ] [text "B"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 0 ) ] ] [text "C"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 0 ) ] ] [text "D"]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
                     , Block.custom <| questionFeedback4 model
                     ]
                 |> Card.view
@@ -375,15 +358,11 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.text [] [ text "a) option1" ]
-                    , Block.text [] [ text "b) option2" ]
-                    , Block.text [] [ text "c) option3" ]
-                    , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 1 ) ] ] [text "A"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 0 ) ] ] [text "B"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 0 ) ] ] [text "C"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 0 ) ] ] [text "D"]
-                    , Block.custom <| questionFeedback5 model
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
+                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
+                    , [Block.custom <| questionFeedback5 model
                     {--
                     Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "Submit"]
                     --}
