@@ -5964,7 +5964,7 @@ var author$project$Main$init = F3(
 		var _n1 = A2(
 			author$project$Main$urlUpdate,
 			url,
-			{currentQuestion: 1, lastSubmittedAnswer: 0, modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$hidden, navKey: key, navState: navState, page: author$project$Main$Home, question1: -1, question2: -1, question3: -1, question4: -1, question5: -1});
+			{currentQuestion: 1, enableNextQuestion: false, lastSubmittedAnswer: 0, modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$hidden, navKey: key, navState: navState, page: author$project$Main$Home, question1: -1, question2: -1, question3: -1, question4: -1, question5: -1});
 		var model = _n1.a;
 		var urlCmd = _n1.b;
 		return _Utils_Tuple2(
@@ -6560,11 +6560,10 @@ var rundis$elm_bootstrap$Bootstrap$Navbar$subscriptions = F2(
 var author$project$Main$subscriptions = function (model) {
 	return A2(rundis$elm_bootstrap$Bootstrap$Navbar$subscriptions, model.navState, author$project$Main$NavMsg);
 };
-var rundis$elm_bootstrap$Bootstrap$Modal$Show = {$: 'Show'};
-var rundis$elm_bootstrap$Bootstrap$Modal$shown = rundis$elm_bootstrap$Bootstrap$Modal$Show;
-var author$project$Main$checkIfCorrectAnswer = function (model) {
-	return (model.lastSubmittedAnswer === 1) ? rundis$elm_bootstrap$Bootstrap$Modal$shown : rundis$elm_bootstrap$Bootstrap$Modal$hidden;
-};
+var author$project$Main$checkIfCorrectAnswer = F2(
+	function (quNumber, value) {
+		return (value === 1) ? true : false;
+	});
 var elm$browser$Browser$Navigation$load = _Browser_load;
 var elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
 var elm$url$Url$addPort = F2(
@@ -6611,6 +6610,8 @@ var elm$url$Url$toString = function (url) {
 					_Utils_ap(http, url.host)),
 				url.path)));
 };
+var rundis$elm_bootstrap$Bootstrap$Modal$Show = {$: 'Show'};
+var rundis$elm_bootstrap$Bootstrap$Modal$shown = rundis$elm_bootstrap$Bootstrap$Modal$Show;
 var author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6651,9 +6652,7 @@ var author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{
-							modalVisibility: author$project$Main$checkIfCorrectAnswer(model)
-						}),
+						{modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$shown}),
 					elm$core$Platform$Cmd$none);
 			case 'UpdateLastSubmittedAnswer':
 				var answer = msg.a;
@@ -6667,7 +6666,10 @@ var author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{question1: value}),
+						{
+							enableNextQuestion: A2(author$project$Main$checkIfCorrectAnswer, 1, value),
+							question1: value
+						}),
 					elm$core$Platform$Cmd$none);
 			case 'UpdateQuestion':
 				var qNum = msg.a;
@@ -6697,20 +6699,24 @@ var author$project$Main$update = F2(
 						model,
 						{question4: value}),
 					elm$core$Platform$Cmd$none);
-			default:
+			case 'Question5':
 				var value = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{question5: value}),
 					elm$core$Platform$Cmd$none);
+			default:
+				var value = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{enableNextQuestion: value}),
+					elm$core$Platform$Cmd$none);
 		}
 	});
 var author$project$Main$Question1 = function (a) {
 	return {$: 'Question1', a: a};
-};
-var author$project$Main$ShowModal = function (a) {
-	return {$: 'ShowModal', a: a};
 };
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
@@ -6999,12 +7005,6 @@ var elm$virtual_dom$VirtualDom$node = function (tag) {
 		_VirtualDom_noScript(tag));
 };
 var elm$html$Html$node = elm$virtual_dom$VirtualDom$node;
-var elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
 var rundis$elm_bootstrap$Bootstrap$Internal$Button$Attrs = function (a) {
 	return {$: 'Attrs', a: a};
 };
@@ -7160,17 +7160,12 @@ var rundis$elm_bootstrap$Bootstrap$Button$button = F2(
 			rundis$elm_bootstrap$Bootstrap$Internal$Button$buttonAttributes(options),
 			children);
 	});
-var elm$html$Html$a = _VirtualDom_node('a');
-var rundis$elm_bootstrap$Bootstrap$Button$linkButton = F2(
-	function (options, children) {
-		return A2(
-			elm$html$Html$a,
-			A2(
-				elm$core$List$cons,
-				A2(elm$html$Html$Attributes$attribute, 'role', 'button'),
-				rundis$elm_bootstrap$Bootstrap$Internal$Button$buttonAttributes(options)),
-			children);
-	});
+var rundis$elm_bootstrap$Bootstrap$Internal$Button$Disabled = function (a) {
+	return {$: 'Disabled', a: a};
+};
+var rundis$elm_bootstrap$Bootstrap$Button$disabled = function (disabled_) {
+	return rundis$elm_bootstrap$Bootstrap$Internal$Button$Disabled(disabled_);
+};
 var rundis$elm_bootstrap$Bootstrap$Internal$Button$Coloring = function (a) {
 	return {$: 'Coloring', a: a};
 };
@@ -7180,11 +7175,6 @@ var rundis$elm_bootstrap$Bootstrap$Internal$Button$Outlined = function (a) {
 var rundis$elm_bootstrap$Bootstrap$Internal$Button$Primary = {$: 'Primary'};
 var rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary = rundis$elm_bootstrap$Bootstrap$Internal$Button$Coloring(
 	rundis$elm_bootstrap$Bootstrap$Internal$Button$Outlined(rundis$elm_bootstrap$Bootstrap$Internal$Button$Primary));
-var rundis$elm_bootstrap$Bootstrap$Internal$Button$Roled = function (a) {
-	return {$: 'Roled', a: a};
-};
-var rundis$elm_bootstrap$Bootstrap$Button$primary = rundis$elm_bootstrap$Bootstrap$Internal$Button$Coloring(
-	rundis$elm_bootstrap$Bootstrap$Internal$Button$Roled(rundis$elm_bootstrap$Bootstrap$Internal$Button$Primary));
 var rundis$elm_bootstrap$Bootstrap$Card$Config = function (a) {
 	return {$: 'Config', a: a};
 };
@@ -8476,7 +8466,20 @@ var author$project$Main$integrationByPartsPage = function (model) {
 													elm$html$Html$text('Wrong ans')
 												]))),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$questionFeedback1(model))
+										author$project$Main$questionFeedback1(model)),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(model.enableNextQuestion),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(_List_Nil)
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Next question')
+												])))
 									]),
 								A3(
 									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
@@ -8490,411 +8493,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
 						]))
 				])),
-			A2(elm$html$Html$br, _List_Nil, _List_Nil),
-			A2(
-			rundis$elm_bootstrap$Bootstrap$Grid$row,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					rundis$elm_bootstrap$Bootstrap$Grid$col,
-					_List_Nil,
-					_List_fromArray(
-						[
-							rundis$elm_bootstrap$Bootstrap$Card$view(
-							A3(
-								rundis$elm_bootstrap$Bootstrap$Card$block,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Getting started is real easy. Just click the start button.')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A3(
-												elm$html$Html$node,
-												'font',
-												_List_fromArray(
-													[
-														A2(elm$html$Html$Attributes$attribute, 'size', '6')
-													]),
-												_List_fromArray(
-													[
-														elm$html$Html$text('∫')
-													])),
-												elm$html$Html$text(' (x * x+1)')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Attributes$href('#getting-started')
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Start')
-												]))),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$button,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Events$onClick(
-															author$project$Main$ShowModal(1))
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Submit')
-												])))
-									]),
-								A3(
-									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
-									_List_Nil,
-									_List_fromArray(
-										[
-											elm$html$Html$text('Question 2')
-										]),
-									rundis$elm_bootstrap$Bootstrap$Card$config(
-										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
-						]))
-				])),
-			A2(elm$html$Html$br, _List_Nil, _List_Nil),
-			A2(
-			rundis$elm_bootstrap$Bootstrap$Grid$row,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					rundis$elm_bootstrap$Bootstrap$Grid$col,
-					_List_Nil,
-					_List_fromArray(
-						[
-							rundis$elm_bootstrap$Bootstrap$Card$view(
-							A3(
-								rundis$elm_bootstrap$Bootstrap$Card$block,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Getting started is real easy. Just click the start button.')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A3(
-												elm$html$Html$node,
-												'font',
-												_List_fromArray(
-													[
-														A2(elm$html$Html$Attributes$attribute, 'size', '6')
-													]),
-												_List_fromArray(
-													[
-														elm$html$Html$text('∫')
-													])),
-												elm$html$Html$text(' (x * x+1)')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Attributes$href('#getting-started')
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Start')
-												]))),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$button,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Events$onClick(
-															author$project$Main$ShowModal(1))
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('testst')
-												])))
-									]),
-								A3(
-									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
-									_List_Nil,
-									_List_fromArray(
-										[
-											elm$html$Html$text('Question 3')
-										]),
-									rundis$elm_bootstrap$Bootstrap$Card$config(
-										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
-						]))
-				])),
-			A2(elm$html$Html$br, _List_Nil, _List_Nil),
-			A2(
-			rundis$elm_bootstrap$Bootstrap$Grid$row,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					rundis$elm_bootstrap$Bootstrap$Grid$col,
-					_List_Nil,
-					_List_fromArray(
-						[
-							rundis$elm_bootstrap$Bootstrap$Card$view(
-							A3(
-								rundis$elm_bootstrap$Bootstrap$Card$block,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Getting started is real easy. Just click the start button.')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A3(
-												elm$html$Html$node,
-												'font',
-												_List_fromArray(
-													[
-														A2(elm$html$Html$Attributes$attribute, 'size', '6')
-													]),
-												_List_fromArray(
-													[
-														elm$html$Html$text('∫')
-													])),
-												elm$html$Html$text(' (x * x+1)')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Attributes$href('#getting-started')
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Start')
-												]))),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$button,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Events$onClick(
-															author$project$Main$ShowModal(1))
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('testst')
-												])))
-									]),
-								A3(
-									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
-									_List_Nil,
-									_List_fromArray(
-										[
-											elm$html$Html$text('Question 4')
-										]),
-									rundis$elm_bootstrap$Bootstrap$Card$config(
-										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
-						]))
-				])),
-			A2(elm$html$Html$br, _List_Nil, _List_Nil),
-			A2(
-			rundis$elm_bootstrap$Bootstrap$Grid$row,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					rundis$elm_bootstrap$Bootstrap$Grid$col,
-					_List_Nil,
-					_List_fromArray(
-						[
-							rundis$elm_bootstrap$Bootstrap$Card$view(
-							A3(
-								rundis$elm_bootstrap$Bootstrap$Card$block,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Getting started is real easy. Just click the start button.')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												A3(
-												elm$html$Html$node,
-												'font',
-												_List_fromArray(
-													[
-														A2(elm$html$Html$Attributes$attribute, 'size', '6')
-													]),
-												_List_fromArray(
-													[
-														elm$html$Html$text('∫')
-													])),
-												elm$html$Html$text(' (x * x+1)')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Attributes$href('#getting-started')
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Start')
-												]))),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$button,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Events$onClick(
-															author$project$Main$ShowModal(1))
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Submit')
-												])))
-									]),
-								A3(
-									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
-									_List_Nil,
-									_List_fromArray(
-										[
-											elm$html$Html$text('Question 5')
-										]),
-									rundis$elm_bootstrap$Bootstrap$Card$config(
-										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
-						]))
-				])),
-			A2(elm$html$Html$br, _List_Nil, _List_Nil),
-			A2(
-			rundis$elm_bootstrap$Bootstrap$Grid$row,
-			_List_Nil,
-			_List_fromArray(
-				[
-					A2(
-					rundis$elm_bootstrap$Bootstrap$Grid$col,
-					_List_Nil,
-					_List_fromArray(
-						[
-							rundis$elm_bootstrap$Bootstrap$Card$view(
-							A3(
-								rundis$elm_bootstrap$Bootstrap$Card$block,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('Check out the modules overview')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$linkButton,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$primary,
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Attributes$href('#modules')
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Module')
-												])))
-									]),
-								A3(
-									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
-									_List_Nil,
-									_List_fromArray(
-										[
-											elm$html$Html$text('TESTQuestion 2')
-										]),
-									rundis$elm_bootstrap$Bootstrap$Card$config(
-										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
-						]))
-				]))
+			A2(elm$html$Html$br, _List_Nil, _List_Nil)
 		]);
 };
 var author$project$Main$pageHome = function (model) {
@@ -9083,6 +8682,13 @@ var author$project$Main$mainContent = function (model) {
 			}
 		}());
 };
+var elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var elm$html$Html$a = _VirtualDom_node('a');
 var rundis$elm_bootstrap$Bootstrap$Navbar$Brand = function (a) {
 	return {$: 'Brand', a: a};
 };
@@ -9951,7 +9557,7 @@ var author$project$Main$menu = function (model) {
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text('Elm Bootstrap')
+						elm$html$Html$text('Welcome!')
 					]),
 				rundis$elm_bootstrap$Bootstrap$Navbar$container(
 					rundis$elm_bootstrap$Bootstrap$Navbar$withAnimation(
