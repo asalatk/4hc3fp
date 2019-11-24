@@ -235,7 +235,42 @@ questionFeedback1 model =
         Alert.simpleDanger  [] [ text "Incorrect"]
     else 
         div [] []
-        
+
+questionFeedback2 : Model -> Html Msg
+questionFeedback2 model = 
+    if model.question2 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question2 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+questionFeedback3 : Model -> Html Msg
+questionFeedback3 model = 
+    if model.question3 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question3 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+questionFeedback4 : Model -> Html Msg
+questionFeedback4 model = 
+    if model.question4 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question4 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+questionFeedback5 : Model -> Html Msg
+questionFeedback5 model = 
+    if model.question5 == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if model.question5 == 0 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []        
 
 pageHome : Model -> List (Html Msg)
 pageHome model =
@@ -252,21 +287,14 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Add some question here" ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    {--
-                    , 
-                    Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    --}
                     , Block.text [] [ text "a) option1" ]
                     , Block.text [] [ text "b) option2" ]
                     , Block.text [] [ text "c) option3" ]
                     , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "Correct ans"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Wrong ans"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "A"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "B"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "C"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "D"]
                     , Block.custom <| questionFeedback1 model
                     ]
                 |> Card.view
@@ -281,13 +309,15 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , 
-                    Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "Submit"]
+                    , Block.text [] [ text "a) option1" ]
+                    , Block.text [] [ text "b) option2" ]
+                    , Block.text [] [ text "c) option3" ]
+                    , Block.text [] [ text "d) option4" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 1 ) ] ] [text "A"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 0 ) ] ] [text "B"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 0 ) ] ] [text "C"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question2 0 ) ] ] [text "D"]
+                    , Block.custom <| questionFeedback2 model
                     ]
                 |> Card.view
             ]
@@ -301,13 +331,15 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , 
-                    Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "testst"]
+                    , Block.text [] [ text "a) option1" ]
+                    , Block.text [] [ text "b) option2" ]
+                    , Block.text [] [ text "c) option3" ]
+                    , Block.text [] [ text "d) option4" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 1 ) ] ] [text "A"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 0 ) ] ] [text "B"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 0 ) ] ] [text "C"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question3 0 ) ] ] [text "D"]
+                    , Block.custom <| questionFeedback3 model
                     ]
                 |> Card.view
             ]
@@ -321,13 +353,15 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , 
-                    Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "testst"]
+                    , Block.text [] [ text "a) option1" ]
+                    , Block.text [] [ text "b) option2" ]
+                    , Block.text [] [ text "c) option3" ]
+                    , Block.text [] [ text "d) option4" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 1 ) ] ] [text "A"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 0 ) ] ] [text "B"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 0 ) ] ] [text "C"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question4 0 ) ] ] [text "D"]
+                    , Block.custom <| questionFeedback4 model
                     ]
                 |> Card.view
             ]
@@ -341,13 +375,18 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , 
-                    Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#getting-started" ] ]
-                            [ text "Start" ]
-                    ,
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1) ] ] [text "Submit"]
+                    , Block.text [] [ text "a) option1" ]
+                    , Block.text [] [ text "b) option2" ]
+                    , Block.text [] [ text "c) option3" ]
+                    , Block.text [] [ text "d) option4" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 1 ) ] ] [text "A"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 0 ) ] ] [text "B"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 0 ) ] ] [text "C"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question5 0 ) ] ] [text "D"]
+                    , Block.custom <| questionFeedback5 model
+                    {--
+                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "Submit"]
+                    --}
                     ]
                 |> Card.view
             ]
