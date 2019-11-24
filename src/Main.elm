@@ -18,6 +18,7 @@ import Bootstrap.ListGroup as Listgroup
 import Bootstrap.Modal as Modal
 import Bootstrap.Alert as Alert
 import Bootstrap.Form.Radio as Radio
+import Array
 
 
 
@@ -37,6 +38,7 @@ type alias Model =
     , question3 : Int
     , question4 : Int
     , question5 : Int
+    , enableNextQuestion: Bool
     }
 
 type Page
@@ -65,7 +67,7 @@ init flags url key =
             Navbar.initialState NavMsg
 
         ( model, urlCmd ) =
-            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0  }
+            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False  }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
 
@@ -86,13 +88,15 @@ type Msg
     | Question3 Int
     | Question4 Int
     | Question5 Int
+    | EnableNextQuestion Bool
+    | LaodNextQuestion 
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Navbar.subscriptions model.navState NavMsg
 
-
+questionLabels = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -119,14 +123,14 @@ update msg model =
             )
 
         ShowModal qNum ->
-            ( { model | modalVisibility = checkIfCorrectAnswer model}
+            ( { model | modalVisibility = Modal.shown}
             , Cmd.none
             )
 
         UpdateLastSubmittedAnswer answer -> ({model | lastSubmittedAnswer = answer}
             , Cmd.none)
         Question1 value ->
-            ( { model | question1 = value }
+            ( { model | question1 = value, enableNextQuestion = (checkIfCorrectAnswer 1 value)}
             , Cmd.none
             )
 
@@ -152,10 +156,19 @@ update msg model =
             ( { model | question5 = value }
             , Cmd.none
             )
+        EnableNextQuestion value ->
+            ( { model | enableNextQuestion = value }
+            , Cmd.none
+            )
+        LaodNextQuestion ->
+            ( { model | enableNextQuestion = False, currentQuestion = model.currentQuestion+1 }
+            , Cmd.none
+            )
 
 
 
-checkIfCorrectAnswer model = if model.lastSubmittedAnswer ==1 then Modal.shown else Modal.hidden
+
+checkIfCorrectAnswer quNumber value = if value == 1 then True else False
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
 urlUpdate url model =
     case decode url of
@@ -235,7 +248,7 @@ questionFeedback1 model =
         Alert.simpleDanger  [] [ text "Incorrect"]
     else 
         div [] []
-
+get n xs = List.head (List.drop n xs)
 questionFeedback2 : Model -> Html Msg
 questionFeedback2 model = 
     if model.question2 == 1 then
@@ -275,6 +288,10 @@ questionFeedback5 model =
 pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text "Click on an integration technique you want to learn today." ]]
+fromJust : Maybe String -> String
+fromJust x = case x of
+    Just y -> y
+    Nothing -> "NotFound"
 
 integrationByPartsPage : Model -> List (Html Msg)
 integrationByPartsPage model =
@@ -282,109 +299,27 @@ integrationByPartsPage model =
     , Grid.row []
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Question 1" ]
+                |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
                     [ Block.text [] [ text "Add some question here" ]
-                    , Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
-                    , Block.custom <| questionFeedback1 model
+                    ,
+                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "Option 1"]
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 2"]
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 3"]
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 4"]
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| questionFeedback1 model 
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
                     ]
                 |> Card.view
             ]
         ]
     , br [] []
-    , Grid.row []
-        [ Grid.col []
-            [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Question 2" ]
-                |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
-                    ,
-                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
-                    , Block.custom <| questionFeedback2 model
-                    ]
-                |> Card.view
-            ]
-        ]
-    , br [] []
-    , Grid.row []
-        [ Grid.col []
-            [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Question 3" ]
-                |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
-                    ,
-                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
-                    , Block.custom <| questionFeedback3 model
-                    ]
-                |> Card.view
-            ]
-        ]
-    , br [] []
-    , Grid.row []
-        [ Grid.col []
-            [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Question 4" ]
-                |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
-                    ,
-                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
-                    , Block.custom <| questionFeedback4 model
-                    ]
-                |> Card.view
-            ]
-        ]
-    , br [] []
-    , Grid.row []
-        [ Grid.col []
-            [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "Question 5" ]
-                |> Card.block []
-                    [ Block.text [] [ text "Getting started is real easy. Just click the start button." ]
-                    ,
-                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "a) option1"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "b) option2"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "c) option3"]]
-                    , div [] [Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "d) option4"]]
-                    , [Block.custom <| questionFeedback5 model
-                    {--
-                    Block.custom <| Button.button [Button.primary, Button.attrs [ onClick (ShowModal 1)] ] [text "Submit"]
-                    --}
-                    ]
-                |> Card.view
-            ]
-        ]
-    , br [] []    
-    , Grid.row []
-        [ Grid.col []
-            [ Card.config [ Card.outlinePrimary ]
-                |> Card.headerH4 [] [ text "TESTQuestion 2" ]
-                |> Card.block []
-                    [ Block.text [] [ text "Check out the modules overview" ]
-                    , Block.custom <|
-                        Button.linkButton
-                            [ Button.primary, Button.attrs [ href "#modules" ] ]
-                            [ text "Module" ]
-                    ]
-                |> Card.view
-            ]
-        ]
+    
     ]
 
 
