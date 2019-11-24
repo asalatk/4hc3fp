@@ -4327,6 +4327,43 @@ function _Browser_load(url)
 		}
 	}));
 }
+
+
+
+var _Bitwise_and = F2(function(a, b)
+{
+	return a & b;
+});
+
+var _Bitwise_or = F2(function(a, b)
+{
+	return a | b;
+});
+
+var _Bitwise_xor = F2(function(a, b)
+{
+	return a ^ b;
+});
+
+function _Bitwise_complement(a)
+{
+	return ~a;
+};
+
+var _Bitwise_shiftLeftBy = F2(function(offset, a)
+{
+	return a << offset;
+});
+
+var _Bitwise_shiftRightBy = F2(function(offset, a)
+{
+	return a >> offset;
+});
+
+var _Bitwise_shiftRightZfBy = F2(function(offset, a)
+{
+	return a >>> offset;
+});
 var author$project$Main$ClickedLink = function (a) {
 	return {$: 'ClickedLink', a: a};
 };
@@ -6706,17 +6743,32 @@ var author$project$Main$update = F2(
 						model,
 						{question5: value}),
 					elm$core$Platform$Cmd$none);
-			default:
+			case 'EnableNextQuestion':
 				var value = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{enableNextQuestion: value}),
 					elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{currentQuestion: model.currentQuestion + 1, enableNextQuestion: false}),
+					elm$core$Platform$Cmd$none);
 		}
 	});
+var author$project$Main$LaodNextQuestion = {$: 'LaodNextQuestion'};
 var author$project$Main$Question1 = function (a) {
 	return {$: 'Question1', a: a};
+};
+var author$project$Main$fromJust = function (x) {
+	if (x.$ === 'Just') {
+		var y = x.a;
+		return y;
+	} else {
+		return 'NotFound';
+	}
 };
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
@@ -6998,6 +7050,86 @@ var author$project$Main$questionFeedback1 = function (model) {
 				elm$html$Html$text('Incorrect')
 			])) : A2(elm$html$Html$div, _List_Nil, _List_Nil));
 };
+var author$project$Main$questionLabels = _List_fromArray(
+	['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5']);
+var elm$core$Array$fromListHelp = F3(
+	function (list, nodeList, nodeListSize) {
+		fromListHelp:
+		while (true) {
+			var _n0 = A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, list);
+			var jsArray = _n0.a;
+			var remainingItems = _n0.b;
+			if (_Utils_cmp(
+				elm$core$Elm$JsArray$length(jsArray),
+				elm$core$Array$branchFactor) < 0) {
+				return A2(
+					elm$core$Array$builderToArray,
+					true,
+					{nodeList: nodeList, nodeListSize: nodeListSize, tail: jsArray});
+			} else {
+				var $temp$list = remainingItems,
+					$temp$nodeList = A2(
+					elm$core$List$cons,
+					elm$core$Array$Leaf(jsArray),
+					nodeList),
+					$temp$nodeListSize = nodeListSize + 1;
+				list = $temp$list;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue fromListHelp;
+			}
+		}
+	});
+var elm$core$Array$fromList = function (list) {
+	if (!list.b) {
+		return elm$core$Array$empty;
+	} else {
+		return A3(elm$core$Array$fromListHelp, list, _List_Nil, 0);
+	}
+};
+var elm$core$Bitwise$shiftRightZfBy = _Bitwise_shiftRightZfBy;
+var elm$core$Array$bitMask = 4294967295 >>> (32 - elm$core$Array$shiftStep);
+var elm$core$Bitwise$and = _Bitwise_and;
+var elm$core$Elm$JsArray$unsafeGet = _JsArray_unsafeGet;
+var elm$core$Array$getHelp = F3(
+	function (shift, index, tree) {
+		getHelp:
+		while (true) {
+			var pos = elm$core$Array$bitMask & (index >>> shift);
+			var _n0 = A2(elm$core$Elm$JsArray$unsafeGet, pos, tree);
+			if (_n0.$ === 'SubTree') {
+				var subTree = _n0.a;
+				var $temp$shift = shift - elm$core$Array$shiftStep,
+					$temp$index = index,
+					$temp$tree = subTree;
+				shift = $temp$shift;
+				index = $temp$index;
+				tree = $temp$tree;
+				continue getHelp;
+			} else {
+				var values = _n0.a;
+				return A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, values);
+			}
+		}
+	});
+var elm$core$Bitwise$shiftLeftBy = _Bitwise_shiftLeftBy;
+var elm$core$Array$tailIndex = function (len) {
+	return (len >>> 5) << 5;
+};
+var elm$core$Basics$ge = _Utils_ge;
+var elm$core$Array$get = F2(
+	function (index, _n0) {
+		var len = _n0.a;
+		var startShift = _n0.b;
+		var tree = _n0.c;
+		var tail = _n0.d;
+		return ((index < 0) || (_Utils_cmp(index, len) > -1)) ? elm$core$Maybe$Nothing : ((_Utils_cmp(
+			index,
+			elm$core$Array$tailIndex(len)) > -1) ? elm$core$Maybe$Just(
+			A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, tail)) : elm$core$Maybe$Just(
+			A3(elm$core$Array$getHelp, startShift, index, tree)));
+	});
+var elm$core$Basics$not = _Basics_not;
 var elm$html$Html$br = _VirtualDom_node('br');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
 var elm$virtual_dom$VirtualDom$node = function (tag) {
@@ -8369,34 +8501,6 @@ var author$project$Main$integrationByPartsPage = function (model) {
 													])),
 												elm$html$Html$text(' (x * x+1)')
 											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('a) option1')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('b) option2')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('c) option3')
-											])),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('d) option4')
-											])),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
 											rundis$elm_bootstrap$Bootstrap$Button$button,
@@ -8412,7 +8516,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 												]),
 											_List_fromArray(
 												[
-													elm$html$Html$text('Correct ans')
+													elm$html$Html$text('Option 1')
 												]))),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
@@ -8429,7 +8533,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 												]),
 											_List_fromArray(
 												[
-													elm$html$Html$text('Wrong ans')
+													elm$html$Html$text('Option 2')
 												]))),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
@@ -8446,7 +8550,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 												]),
 											_List_fromArray(
 												[
-													elm$html$Html$text('Wrong ans')
+													elm$html$Html$text('Option 3')
 												]))),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
@@ -8463,7 +8567,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 												]),
 											_List_fromArray(
 												[
-													elm$html$Html$text('Wrong ans')
+													elm$html$Html$text('Option 4')
 												]))),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										author$project$Main$questionFeedback1(model)),
@@ -8473,8 +8577,12 @@ var author$project$Main$integrationByPartsPage = function (model) {
 											_List_fromArray(
 												[
 													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
-													rundis$elm_bootstrap$Bootstrap$Button$disabled(model.enableNextQuestion),
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(_List_Nil)
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(!model.enableNextQuestion),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$LaodNextQuestion)
+														]))
 												]),
 											_List_fromArray(
 												[
@@ -8486,7 +8594,12 @@ var author$project$Main$integrationByPartsPage = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text('Question 1')
+											elm$html$Html$text(
+											author$project$Main$fromJust(
+												A2(
+													elm$core$Array$get,
+													model.currentQuestion - 1,
+													elm$core$Array$fromList(author$project$Main$questionLabels))))
 										]),
 									rundis$elm_bootstrap$Bootstrap$Card$config(
 										_List_fromArray(
@@ -8799,7 +8912,6 @@ var rundis$elm_bootstrap$Bootstrap$Navbar$maybeBrand = function (brand_) {
 		return _List_Nil;
 	}
 };
-var elm$core$Basics$not = _Basics_not;
 var rundis$elm_bootstrap$Bootstrap$Navbar$sizeToComparable = function (size) {
 	switch (size.$) {
 		case 'XS':

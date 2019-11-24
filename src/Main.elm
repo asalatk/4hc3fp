@@ -304,15 +304,10 @@ integrationByPartsPage model =
                     [ Block.text [] [ text "Add some question here" ]
                     ,
                     Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-
-                    , Block.text [] [ text "a) option1" ]
-                    , Block.text [] [ text "b) option2" ]
-                    , Block.text [] [ text "c) option3" ]
-                    , Block.text [] [ text "d) option4" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "A"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "B"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "C"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "D"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "Option 1"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 2"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 3"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 4"]
                     , Block.custom <| questionFeedback1 model 
                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
                     ]
