@@ -32,7 +32,6 @@ type alias Model =
     , modalVisibility : Modal.Visibility
     , currentQuestion: Int
     , lastSubmittedAnswer: Int
-   
     , question1 : Int
     , question2 : Int
     , question3 : Int
@@ -83,7 +82,6 @@ type Msg
     | ShowModal Int
     | UpdateLastSubmittedAnswer Int
     | UpdateQuestion Int
-   
     | Question1 Int
     | Question2 Int
     | Question3 Int
@@ -92,15 +90,15 @@ type Msg
     | EnableNextQuestion Bool
     | EnablePreviousQuestion Bool
     | LoadPreviousQuestion
-    | LaodNextQuestion 
+    | LoadNextQuestion 
 
 questionsAnswers model = [model.question1, model.question2, model.question3, model.question4, model.question5]
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Navbar.subscriptions model.navState NavMsg
 
-questionLabels = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
-questions = ["What values would you choose for u and dv?", "What is the value for v?", "What is the value of du?", "Given the general form of integration by parts, what is the subsituted formula?", "What is the final answer?"]
+questionLabels = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Congratulations!"]
+questions = ["What values would you choose for u and dv?", "What is the value for v?", "What is the value of du?", "Given the general form of integration by parts, what is the substituted formula?", "What is the final answer?", "Good job on working through this complex integration problem. Here is another one that you can try out: f(x) = ∫ (cos(7x+5) dx . To learn more, click on the button below."]
 questOneOptions = ["u = x and dv = sqrt(x+1)", "u = sin x and dv = x^2", "u = v = x^2 + 1"]
 questTwoOptions = ["2/3 (x+1)^3/2", "sin x", "sqrt(x+1) + 1"]
 questThreeOptions = ["dx", "x^2 dx", "x^10 dx"]
@@ -175,7 +173,7 @@ update msg model =
             ( { model | enablePreviousQuestion = value }
             , Cmd.none
             )
-        LaodNextQuestion ->
+        LoadNextQuestion ->
             ( { model | enableNextQuestion = (fromJustInt (Array.get (model.currentQuestion) (Array.fromList (questionsAnswers model))) == 1), currentQuestion = model.currentQuestion+1, enablePreviousQuestion = (if model.currentQuestion > 0 then True else False) }
             , Cmd.none
             )
@@ -255,6 +253,7 @@ mainContent model =
                 uSubstitutionPage model
 
             PartialFractionDecomp -> pageNotFound
+
             NotFound ->
                 pageNotFound
 
@@ -269,14 +268,19 @@ questionFeedback model =
         div [] []
      
 questionNotifications = [Question1, Question2, Question3, Question4, Question5]
+
 pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text """Click on an integration technique you want to learn today.
     	Learn the pattern and then try on your own!""" ]]
-checkIfSelected model number = if fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model))) == number then Button.primary 
-    else Button.outlinePrimary
-fromJustMsg: Maybe (Int -> Msg) ->(Int -> Msg)
 
+checkIfSelected model number = 
+    if fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model))) == number then 
+        Button.primary 
+    else 
+        Button.outlinePrimary
+
+fromJustMsg: Maybe (Int -> Msg) ->(Int -> Msg)
 fromJustMsg x = case x of
     Just y -> y
     Nothing -> Question1
@@ -284,16 +288,46 @@ fromJustMsg x = case x of
 fromJustInt x = case x of 
     Just y -> y
     Nothing -> 0
+
 fromJust : Maybe String -> String
 fromJust x = case x of
     Just y -> y
-    Nothing -> "Congratulations!"
+    Nothing -> ""
 
 fromJustList x = case x of
     Just [y] -> [y]
     Just [] -> ["h","h"]
     Nothing -> []
     Just (xs :: ys :: zz) -> [xs]++[ys]++zz
+
+
+renderNewButton: Int -> Html Msg
+renderNewButton value = 
+    if value == 5 then
+        Button.linkButton [ Button.primary, Button.attrs [ href "#USubstitution"] ] [ text "Go to USubstitution" ]
+    else 
+        div [] [] 
+
+renderOption1: Model -> Html Msg
+renderOption1 model = 
+    if (model.currentQuestion-1) == 5 then
+        div [] []
+    else
+        Button.button [(checkIfSelected model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))] 
+
+renderOption2: Model -> Html Msg
+renderOption2 model = 
+    if (model.currentQuestion-1) == 5 then
+        div [] []
+    else 
+        Button.button [(checkIfSelected model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 2 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+
+renderOption3: Model -> Html Msg
+renderOption3 model = 
+    if (model.currentQuestion-1) == 5 then
+        div [] []
+    else 
+        Button.button [(checkIfSelected model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 3) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
 
 
 integrationByPartsPage : Model -> List (Html Msg)
@@ -306,17 +340,17 @@ integrationByPartsPage model =
                 |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
                     [ Block.text [] [ text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
-                    , Block.custom <| Button.button [(checkIfSelected model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
-                     , Block.text [] [ text "" ]
-                    , Block.custom <| Button.button [(checkIfSelected model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 2 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
-                     , Block.text [] [ text "" ]
-                    , Block.custom <| Button.button [(checkIfSelected model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 3) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
-                     , Block.text [] [ text "" ]
-                    
-                    , Block.custom <| questionFeedback model 
+                    , Block.custom <| (renderNewButton (model.currentQuestion-1))
+                    , Block.custom <| (renderOption1 model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (renderOption2 model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (renderOption3 model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (questionFeedback model) 
                     , Block.text [] [ text "" ]
                      , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [onClick (LoadPreviousQuestion)] ] [text "Previous question"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LoadNextQuestion)] ] [text "Next question"]
                     ]
                 |> Card.view
             ]
@@ -373,6 +407,4 @@ modal model =
     Modal.config CloseModal
         |> Modal.small
         |> Modal.h4 [] [ text "You got that one wrong. Click next to try again." ]
-
-           
         |> Modal.view model.modalVisibility
