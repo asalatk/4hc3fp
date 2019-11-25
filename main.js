@@ -6001,7 +6001,7 @@ var author$project$Main$init = F3(
 		var _n1 = A2(
 			author$project$Main$urlUpdate,
 			url,
-			{currentQuestion: 1, enableNextQuestion: false, enablePreviousQuestion: false, lastSubmittedAnswer: 0, modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$hidden, navKey: key, navState: navState, page: author$project$Main$Home, question1: -1, question2: -1, question3: -1, question4: -1, question5: -1});
+			{currentQuestion: 1, enableNextQuestion: false, enablePreviousQuestion: false, lastSubmittedAnswer: 0, modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$hidden, navKey: key, navState: navState, page: author$project$Main$Home, question1: -1, question2: -1, question3: -1, question4: -1, question5: -1, showHintEnabled: false});
 		var model = _n1.a;
 		var urlCmd = _n1.b;
 		return _Utils_Tuple2(
@@ -6692,6 +6692,7 @@ var elm$core$Array$get = F2(
 			A2(elm$core$Elm$JsArray$unsafeGet, elm$core$Array$bitMask & index, tail)) : elm$core$Maybe$Just(
 			A3(elm$core$Array$getHelp, startShift, index, tree)));
 	});
+var elm$core$Basics$not = _Basics_not;
 var elm$url$Url$addPort = F2(
 	function (maybePort, starter) {
 		if (maybePort.$ === 'Nothing') {
@@ -6870,10 +6871,11 @@ var author$project$Main$update = F2(
 									model.currentQuestion,
 									elm$core$Array$fromList(
 										author$project$Main$questionsAnswers(model)))) === 1,
-							enablePreviousQuestion: (model.currentQuestion > 0) ? true : false
+							enablePreviousQuestion: (model.currentQuestion > 0) ? true : false,
+							showHintEnabled: false
 						}),
 					elm$core$Platform$Cmd$none);
-			default:
+			case 'LoadPreviousQuestion':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -6883,10 +6885,17 @@ var author$project$Main$update = F2(
 							enablePreviousQuestion: (model.currentQuestion > 2) ? true : false
 						}),
 					elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{showHintEnabled: !model.showHintEnabled}),
+					elm$core$Platform$Cmd$none);
 		}
 	});
 var author$project$Main$LoadNextQuestion = {$: 'LoadNextQuestion'};
 var author$project$Main$LoadPreviousQuestion = {$: 'LoadPreviousQuestion'};
+var author$project$Main$ShowHintForQuestion = {$: 'ShowHintForQuestion'};
 var author$project$Main$fromJust = function (x) {
 	if (x.$ === 'Just') {
 		var y = x.a;
@@ -6894,6 +6903,9 @@ var author$project$Main$fromJust = function (x) {
 	} else {
 		return '';
 	}
+};
+var author$project$Main$isLastQuestion = function (model) {
+	return (model.currentQuestion === 6) ? true : false;
 };
 var elm$html$Html$div = _VirtualDom_node('div');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
@@ -7193,7 +7205,7 @@ var author$project$Main$questionFeedback = function (model) {
 var author$project$Main$questionLabels = _List_fromArray(
 	['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5', 'Congratulations!']);
 var author$project$Main$questions = _List_fromArray(
-	['What values would you choose for u and dv?', 'What is the value for v?', 'What is the value of du?', 'Given the general form of integration by parts, what is the subsituted formula?', 'What is the final answer?', 'Good job on working through this complex integration problem. Here is another one that you can try out: f(x) = ∫ (cos(7x+5) dx . To learn more, click on the button below.']);
+	['What values would you choose for u and dv?', 'What is the value for v?', 'What is the value of du?', 'Given the general form of integration by parts, what is the substituted formula?', 'What is the final answer?', 'Good job on working through this complex integration problem. Here is another one that you can try out: f(x) = ∫ (cos(7x+5) dx . To learn more, click on the button below.']);
 var elm$html$Html$Attributes$href = function (url) {
 	return A2(
 		elm$html$Html$Attributes$stringProperty,
@@ -7571,7 +7583,24 @@ var author$project$Main$renderOption3 = function (model) {
 									elm$core$Array$fromList(author$project$Main$questionOptions)))))))
 			]));
 };
-var elm$core$Basics$not = _Basics_not;
+var author$project$Main$hints = _List_fromArray(
+	['hint 1', 'hint 2', 'hint 3', 'hint 4', 'hint 5']);
+var rundis$elm_bootstrap$Bootstrap$Internal$Role$Warning = {$: 'Warning'};
+var rundis$elm_bootstrap$Bootstrap$Alert$simpleWarning = rundis$elm_bootstrap$Bootstrap$Alert$simple(rundis$elm_bootstrap$Bootstrap$Internal$Role$Warning);
+var author$project$Main$showHint = function (model) {
+	return model.showHintEnabled ? A2(
+		rundis$elm_bootstrap$Bootstrap$Alert$simpleWarning,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text(
+				author$project$Main$fromJust(
+					A2(
+						elm$core$Array$get,
+						model.currentQuestion - 1,
+						elm$core$Array$fromList(author$project$Main$hints))))
+			])) : A2(elm$html$Html$div, _List_Nil, _List_Nil);
+};
 var elm$html$Html$br = _VirtualDom_node('br');
 var elm$html$Html$h1 = _VirtualDom_node('h1');
 var elm$html$Html$h2 = _VirtualDom_node('h2');
@@ -8808,6 +8837,8 @@ var author$project$Main$integrationByPartsPage = function (model) {
 												elm$html$Html$text('')
 											])),
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										author$project$Main$showHint(model)),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
 											rundis$elm_bootstrap$Bootstrap$Button$button,
 											_List_fromArray(
@@ -8840,7 +8871,32 @@ var author$project$Main$integrationByPartsPage = function (model) {
 											_List_fromArray(
 												[
 													elm$html$Html$text('Next question')
-												])))
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(
+													author$project$Main$isLastQuestion(model)),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															elm$html$Html$Events$onClick(author$project$Main$ShowHintForQuestion)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Hint')
+												]))),
+										A2(
+										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text('')
+											]))
 									]),
 								A3(
 									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
@@ -8870,7 +8926,7 @@ var author$project$Main$pageHome = function (model) {
 			_List_Nil,
 			_List_fromArray(
 				[
-					elm$html$Html$text('Click on an integration technique you want to learn today.\n    	Learn the pattern and then try on your own!')
+					elm$html$Html$text('Click on an integration technique you want to learn today.\r\n    	Learn the pattern and then try on your own!')
 				]))
 		]);
 };

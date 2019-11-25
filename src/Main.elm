@@ -39,6 +39,7 @@ type alias Model =
     , question5 : Int
     , enableNextQuestion: Bool
     , enablePreviousQuestion: Bool
+    , showHintEnabled : Bool
     }
 
 type Page
@@ -67,7 +68,7 @@ init flags url key =
             Navbar.initialState NavMsg
 
         ( model, urlCmd ) =
-            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False, enablePreviousQuestion=False  }
+            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, showHintEnabled=False, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False, enablePreviousQuestion=False  }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
 
@@ -91,6 +92,7 @@ type Msg
     | EnablePreviousQuestion Bool
     | LoadPreviousQuestion
     | LoadNextQuestion 
+    | ShowHintForQuestion
 
 questionsAnswers model = [model.question1, model.question2, model.question3, model.question4, model.question5]
 subscriptions : Model -> Sub Msg
@@ -174,7 +176,7 @@ update msg model =
             , Cmd.none
             )
         LoadNextQuestion ->
-            ( { model | enableNextQuestion = (fromJustInt (Array.get (model.currentQuestion) (Array.fromList (questionsAnswers model))) == 1), currentQuestion = model.currentQuestion+1, enablePreviousQuestion = (if model.currentQuestion > 0 then True else False) }
+            ( { model | showHintEnabled=False, enableNextQuestion = (fromJustInt (Array.get (model.currentQuestion) (Array.fromList (questionsAnswers model))) == 1), currentQuestion = model.currentQuestion+1, enablePreviousQuestion = (if model.currentQuestion > 0 then True else False) }
             , Cmd.none
             )
         LoadPreviousQuestion ->
@@ -182,7 +184,10 @@ update msg model =
             , Cmd.none
             )
 
-
+        ShowHintForQuestion -> 
+            ({ model | showHintEnabled = not (model.showHintEnabled) }
+            , Cmd.none
+            )
 
 checkIfCorrectAnswer quNumber value = if value == 1 then True else False
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
@@ -257,6 +262,8 @@ mainContent model =
             NotFound ->
                 pageNotFound
 
+hints = ["hint 1", "hint 2", "hint 3", "hint 4", "hint 5"]
+
 questionFeedback : Model -> Html Msg
 questionFeedback model = 
     if (fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model)))) == 1 then
@@ -266,7 +273,10 @@ questionFeedback model =
         Alert.simpleDanger  [] [ text "Incorrect"]
     else 
         div [] []
-     
+
+
+
+isLastQuestion model = if model.currentQuestion ==6 then True else False 
 questionNotifications = [Question1, Question2, Question3, Question4, Question5]
 
 pageHome : Model -> List (Html Msg)
@@ -274,6 +284,9 @@ pageHome model =
     [ h1 [] [ text """Click on an integration technique you want to learn today.
     	Learn the pattern and then try on your own!""" ]]
 
+showHint model = if model.showHintEnabled == True then 
+   Alert.simpleWarning [] [ text (fromJust(Array.get (model.currentQuestion-1) (Array.fromList(hints)))) ]
+   else  div [] []
 checkIfSelected model number = 
     if fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model))) == number then 
         Button.primary 
@@ -349,8 +362,13 @@ integrationByPartsPage model =
                     , Block.text [] [ text "" ]
                     , Block.custom <| (questionFeedback model) 
                     , Block.text [] [ text "" ]
-                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [onClick (LoadPreviousQuestion)] ] [text "Previous question"]
+                    , Block.custom <| (showHint model) 
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [onClick (LoadPreviousQuestion)] ] [text "Previous question"]
                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LoadNextQuestion)] ] [text "Next question"]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (isLastQuestion model), Button.attrs [onClick (ShowHintForQuestion)] ] [text "Hint"]
+                    , Block.text [] [ text "" ]
+                 
+
                     ]
                 |> Card.view
             ]
