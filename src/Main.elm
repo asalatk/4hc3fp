@@ -39,6 +39,7 @@ type alias Model =
     , question4 : Int
     , question5 : Int
     , enableNextQuestion: Bool
+    , enablePreviousQuestion: Bool
     }
 
 type Page
@@ -67,7 +68,7 @@ init flags url key =
             Navbar.initialState NavMsg
 
         ( model, urlCmd ) =
-            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False  }
+            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False, enablePreviousQuestion=False  }
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
 
@@ -89,9 +90,11 @@ type Msg
     | Question4 Int
     | Question5 Int
     | EnableNextQuestion Bool
+    | EnablePreviousQuestion Bool
+    | LoadPreviousQuestion
     | LaodNextQuestion 
 
-
+questionsAnswers model = [model.question1, model.question2, model.question3, model.question4, model.question5]
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Navbar.subscriptions model.navState NavMsg
@@ -151,28 +154,35 @@ update msg model =
             )
 
         Question3 value ->
-            ( { model | question3 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
+            ( { model | question3 = value, enableNextQuestion = (checkIfCorrectAnswer 3 value) }
             , Cmd.none
             )
 
         Question4 value ->
-            ( { model | question4 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
+            ( { model | question4 = value, enableNextQuestion = (checkIfCorrectAnswer 4 value) }
             , Cmd.none
             )
 
         Question5 value ->
-            ( { model | question5 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
+            ( { model | question5 = value, enableNextQuestion = (checkIfCorrectAnswer 5 value) }
             , Cmd.none
             )
         EnableNextQuestion value ->
             ( { model | enableNextQuestion = value }
             , Cmd.none
             )
-        LaodNextQuestion ->
-            ( { model | enableNextQuestion = False, currentQuestion = model.currentQuestion+1, question1=-1, question2=-1, question3=-1, question4=-1, question5=-1 }
+        EnablePreviousQuestion value ->
+            ( { model | enablePreviousQuestion = value }
             , Cmd.none
             )
-
+        LaodNextQuestion ->
+            ( { model | enableNextQuestion = (fromJustInt (Array.get (model.currentQuestion) (Array.fromList (questionsAnswers model))) == 1), currentQuestion = model.currentQuestion+1, enablePreviousQuestion = (if model.currentQuestion > 0 then True else False) }
+            , Cmd.none
+            )
+        LoadPreviousQuestion ->
+            ( { model |currentQuestion = model.currentQuestion-1, enablePreviousQuestion= (if model.currentQuestion > 2 then True else False), enableNextQuestion = True }
+            , Cmd.none
+            )
 
 
 
@@ -250,9 +260,10 @@ mainContent model =
 
 questionFeedback : Model -> Html Msg
 questionFeedback model = 
-    if model.question1 == 1 then
+    if (fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model)))) == 1 then
         Alert.simpleSuccess [] [ text "Correct!" ]
-    else if model.question1 == 0 then
+    else if (fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model)))) ==2  ||  
+            (fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model)))) ==3 then
         Alert.simpleDanger  [] [ text "Incorrect"]
     else 
         div [] []
@@ -262,22 +273,26 @@ pageHome : Model -> List (Html Msg)
 pageHome model =
     [ h1 [] [ text """Click on an integration technique you want to learn today.
     	Learn the pattern and then try on your own!""" ]]
-
+checkIfSelected model number = if fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model))) == number then Button.primary 
+    else Button.outlinePrimary
 fromJustMsg: Maybe (Int -> Msg) ->(Int -> Msg)
 
 fromJustMsg x = case x of
     Just y -> y
     Nothing -> Question1
 
+fromJustInt x = case x of 
+    Just y -> y
+    Nothing -> 0
 fromJust : Maybe String -> String
 fromJust x = case x of
     Just y -> y
-    Nothing -> "No"
+    Nothing -> "Congratulations!"
 
 fromJustList x = case x of
     Just [y] -> [y]
     Just [] -> ["h","h"]
-    Nothing -> ["y","y"]
+    Nothing -> []
     Just (xs :: ys :: zz) -> [xs]++[ys]++zz
 
 
@@ -291,13 +306,16 @@ integrationByPartsPage model =
                 |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
                     [ Block.text [] [ text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                    , Block.custom <| Button.button [(checkIfSelected model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
                      , Block.text [] [ text "" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 0 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                    , Block.custom <| Button.button [(checkIfSelected model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 2 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
                      , Block.text [] [ text "" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 0) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                    , Block.custom <| Button.button [(checkIfSelected model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 3) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
                      , Block.text [] [ text "" ]
+                    
                     , Block.custom <| questionFeedback model 
+                    , Block.text [] [ text "" ]
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [onClick (LoadPreviousQuestion)] ] [text "Previous question"]
                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
                     ]
                 |> Card.view
