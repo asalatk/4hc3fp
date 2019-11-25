@@ -146,22 +146,22 @@ update msg model =
             , Cmd.none)
    
         Question2 value ->
-            ( { model | question2 = value }
+            ( { model | question2 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
             , Cmd.none
             )
 
         Question3 value ->
-            ( { model | question3 = value }
+            ( { model | question3 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
             , Cmd.none
             )
 
         Question4 value ->
-            ( { model | question4 = value }
+            ( { model | question4 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
             , Cmd.none
             )
 
         Question5 value ->
-            ( { model | question5 = value }
+            ( { model | question5 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
             , Cmd.none
             )
         EnableNextQuestion value ->
@@ -263,6 +263,12 @@ pageHome model =
     [ h1 [] [ text """Click on an integration technique you want to learn today.
     	Learn the pattern and then try on your own!""" ]]
 
+fromJustMsg: Maybe (Int -> Msg) ->(Int -> Msg)
+
+fromJustMsg x = case x of
+    Just y -> y
+    Nothing -> Question1
+
 fromJust : Maybe String -> String
 fromJust x = case x of
     Just y -> y
@@ -285,11 +291,11 @@ integrationByPartsPage model =
                 |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
                     [ Block.text [] [ text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
                      , Block.text [] [ text "" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 0 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
                      , Block.text [] [ text "" ]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 0) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
                      , Block.text [] [ text "" ]
                     , Block.custom <| questionFeedback model 
                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
