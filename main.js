@@ -7584,7 +7584,7 @@ var author$project$Main$renderOption3 = function (model) {
 			]));
 };
 var author$project$Main$hints = _List_fromArray(
-	['hint 1', 'hint 2', 'hint 3', 'hint 4', 'hint 5']);
+	['Choose u as the first of the following: Inverse Trignometric, Logarithmic, Algebraic, Trignometric, Exponential. If both are the same, order does not matter.', 'Integrate dv to get v. General formula for integral of int(x^n) = x^(n+1)/(n+1)', 'Differentiate u to get u. General formula for integral of d(x^n) = (x^(n-1))*(n)', 'Substitute your v and u into the formula. Formula is int(v)*du= U*V- int(u)*dv ', 'Integrate then simplify it to get the answer. Don\'t forget to add C']);
 var rundis$elm_bootstrap$Bootstrap$Internal$Role$Warning = {$: 'Warning'};
 var rundis$elm_bootstrap$Bootstrap$Alert$simpleWarning = rundis$elm_bootstrap$Bootstrap$Alert$simple(rundis$elm_bootstrap$Bootstrap$Internal$Role$Warning);
 var author$project$Main$showHint = function (model) {
@@ -7957,6 +7957,12 @@ var rundis$elm_bootstrap$Bootstrap$Card$view = function (_n0) {
 							},
 							conf.imgBottom)
 						])))));
+};
+var rundis$elm_bootstrap$Bootstrap$Card$Internal$AlignedBlock = function (a) {
+	return {$: 'AlignedBlock', a: a};
+};
+var rundis$elm_bootstrap$Bootstrap$Card$Block$align = function (halign) {
+	return rundis$elm_bootstrap$Bootstrap$Card$Internal$AlignedBlock(halign);
 };
 var rundis$elm_bootstrap$Bootstrap$Card$Internal$BlockItem = function (a) {
 	return {$: 'BlockItem', a: a};
@@ -8753,6 +8759,13 @@ var rundis$elm_bootstrap$Bootstrap$Grid$row = F2(
 			rundis$elm_bootstrap$Bootstrap$Grid$Internal$rowAttributes(options),
 			A2(elm$core$List$map, rundis$elm_bootstrap$Bootstrap$Grid$renderCol, cols));
 	});
+var rundis$elm_bootstrap$Bootstrap$Internal$Text$Center = {$: 'Center'};
+var rundis$elm_bootstrap$Bootstrap$Text$alignXs = function (dir) {
+	return {dir: dir, size: rundis$elm_bootstrap$Bootstrap$General$Internal$XS};
+};
+var rundis$elm_bootstrap$Bootstrap$Text$alignXsCenter = rundis$elm_bootstrap$Bootstrap$Text$alignXs(rundis$elm_bootstrap$Bootstrap$Internal$Text$Center);
+var rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml5 = elm$html$Html$Attributes$class('ml-5');
+var rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mr5 = elm$html$Html$Attributes$class('mr-5');
 var author$project$Main$integrationByPartsPage = function (model) {
 	return _List_fromArray(
 		[
@@ -8783,61 +8796,12 @@ var author$project$Main$integrationByPartsPage = function (model) {
 							rundis$elm_bootstrap$Bootstrap$Card$view(
 							A3(
 								rundis$elm_bootstrap$Bootstrap$Card$block,
-								_List_Nil,
 								_List_fromArray(
 									[
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text(
-												author$project$Main$fromJust(
-													A2(
-														elm$core$Array$get,
-														model.currentQuestion - 1,
-														elm$core$Array$fromList(author$project$Main$questions))))
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$renderNewButton(model.currentQuestion - 1)),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$renderOption1(model)),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$renderOption2(model)),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$renderOption3(model)),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$questionFeedback(model)),
-										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('')
-											])),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										author$project$Main$showHint(model)),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$align(rundis$elm_bootstrap$Bootstrap$Text$alignXsCenter)
+									]),
+								_List_fromArray(
+									[
 										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
 											rundis$elm_bootstrap$Bootstrap$Button$button,
@@ -8848,6 +8812,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 													rundis$elm_bootstrap$Bootstrap$Button$attrs(
 													_List_fromArray(
 														[
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mr5,
 															elm$html$Html$Events$onClick(author$project$Main$LoadPreviousQuestion)
 														]))
 												]),
@@ -8861,28 +8826,13 @@ var author$project$Main$integrationByPartsPage = function (model) {
 											_List_fromArray(
 												[
 													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
-													rundis$elm_bootstrap$Bootstrap$Button$disabled(!model.enableNextQuestion),
-													rundis$elm_bootstrap$Bootstrap$Button$attrs(
-													_List_fromArray(
-														[
-															elm$html$Html$Events$onClick(author$project$Main$LoadNextQuestion)
-														]))
-												]),
-											_List_fromArray(
-												[
-													elm$html$Html$text('Next question')
-												]))),
-										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-										A2(
-											rundis$elm_bootstrap$Bootstrap$Button$button,
-											_List_fromArray(
-												[
-													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
 													rundis$elm_bootstrap$Bootstrap$Button$disabled(
 													author$project$Main$isLastQuestion(model)),
 													rundis$elm_bootstrap$Bootstrap$Button$attrs(
 													_List_fromArray(
 														[
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml5,
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mr5,
 															elm$html$Html$Events$onClick(author$project$Main$ShowHintForQuestion)
 														]))
 												]),
@@ -8890,29 +8840,98 @@ var author$project$Main$integrationByPartsPage = function (model) {
 												[
 													elm$html$Html$text('Hint')
 												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 										A2(
-										rundis$elm_bootstrap$Bootstrap$Card$Block$text,
-										_List_Nil,
-										_List_fromArray(
-											[
-												elm$html$Html$text('')
-											]))
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(!model.enableNextQuestion),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml5,
+															elm$html$Html$Events$onClick(author$project$Main$LoadNextQuestion)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Next question')
+												])))
 									]),
 								A3(
-									rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+									rundis$elm_bootstrap$Bootstrap$Card$block,
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text(
-											author$project$Main$fromJust(
-												A2(
-													elm$core$Array$get,
-													model.currentQuestion - 1,
-													elm$core$Array$fromList(author$project$Main$questionLabels))))
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text(
+													author$project$Main$fromJust(
+														A2(
+															elm$core$Array$get,
+															model.currentQuestion - 1,
+															elm$core$Array$fromList(author$project$Main$questions))))
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderNewButton(model.currentQuestion - 1)),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderOption1(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderOption2(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderOption3(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$questionFeedback(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$showHint(model))
 										]),
-									rundis$elm_bootstrap$Bootstrap$Card$config(
+									A3(
+										rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+										_List_Nil,
 										_List_fromArray(
-											[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary])))))
+											[
+												elm$html$Html$text(
+												author$project$Main$fromJust(
+													A2(
+														elm$core$Array$get,
+														model.currentQuestion - 1,
+														elm$core$Array$fromList(author$project$Main$questionLabels))))
+											]),
+										rundis$elm_bootstrap$Bootstrap$Card$config(
+											_List_fromArray(
+												[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary]))))))
 						]))
 				])),
 			A2(elm$html$Html$br, _List_Nil, _List_Nil)

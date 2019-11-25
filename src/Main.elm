@@ -18,7 +18,9 @@ import Bootstrap.ListGroup as Listgroup
 import Bootstrap.Modal as Modal
 import Bootstrap.Alert as Alert
 import Bootstrap.Form.Radio as Radio
+import Bootstrap.Utilities.Spacing as Spacing
 import Array
+import Bootstrap.Text as Text
 
 
 
@@ -262,7 +264,7 @@ mainContent model =
             NotFound ->
                 pageNotFound
 
-hints = ["hint 1", "hint 2", "hint 3", "hint 4", "hint 5"]
+hints = ["Choose u as the first of the following: Inverse Trignometric, Logarithmic, Algebraic, Trignometric, Exponential. If both are the same, order does not matter.", "Integrate dv to get v. General formula for integral of int(x^n) = x^(n+1)/(n+1)", "Differentiate u to get u. General formula for integral of d(x^n) = (x^(n-1))*(n)", "Substitute your v and u into the formula. Formula is int(v)*du= U*V- int(u)*dv ", "Integrate then simplify it to get the answer. Don't forget to add C"]
 
 questionFeedback : Model -> Html Msg
 questionFeedback model = 
@@ -362,14 +364,16 @@ integrationByPartsPage model =
                     , Block.text [] [ text "" ]
                     , Block.custom <| (questionFeedback model) 
                     , Block.text [] [ text "" ]
-                    , Block.custom <| (showHint model) 
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [onClick (LoadPreviousQuestion)] ] [text "Previous question"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LoadNextQuestion)] ] [text "Next question"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (isLastQuestion model), Button.attrs [onClick (ShowHintForQuestion)] ] [text "Hint"]
-                    , Block.text [] [ text "" ]
+                    , Block.custom <| (showHint model)]
+                |> Card.block [ Block.align Text.alignXsCenter ] [
+                     Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [Spacing.mr5, onClick (LoadPreviousQuestion)] ] [text "Previous question"]
+                     
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (isLastQuestion model), Button.attrs [Spacing.ml5,Spacing.mr5, onClick (ShowHintForQuestion)] ] [text "Hint"]
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [ Spacing.ml5, onClick (LoadNextQuestion)] ] [text "Next question"]]
+
                  
 
-                    ]
+                    
                 |> Card.view
             ]
         ]
