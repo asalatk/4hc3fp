@@ -7052,6 +7052,8 @@ var author$project$Main$questionFeedback1 = function (model) {
 };
 var author$project$Main$questionLabels = _List_fromArray(
 	['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5']);
+var author$project$Main$questions = _List_fromArray(
+	['What values would you choose for u and dv?', 'What is the value for v?', 'What is the value of du?', 'Given the general form of integration by parts, what is the subsituted formula?', 'What is the final answer?']);
 var elm$core$Array$fromListHelp = F3(
 	function (list, nodeList, nodeListSize) {
 		fromListHelp:
@@ -8481,7 +8483,12 @@ var author$project$Main$integrationByPartsPage = function (model) {
 										_List_Nil,
 										_List_fromArray(
 											[
-												elm$html$Html$text('Add some question here')
+												elm$html$Html$text(
+												author$project$Main$fromJust(
+													A2(
+														elm$core$Array$get,
+														model.currentQuestion - 1,
+														elm$core$Array$fromList(author$project$Main$questions))))
 											])),
 										A2(
 										rundis$elm_bootstrap$Bootstrap$Card$Block$text,

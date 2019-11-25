@@ -97,6 +97,14 @@ subscriptions model =
     Navbar.subscriptions model.navState NavMsg
 
 questionLabels = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"]
+questions = ["What values would you choose for u and dv?", "What is the value for v?", "What is the value of du?", "Given the general form of integration by parts, what is the subsituted formula?", "What is the final answer?"]
+questOneOptions = ["u = x and dv = sqrt(x+1)", "u = sin x and dv = x^2", "u = v = x^2 + 1"]
+questTwoOptions = ["2/3 (x+1)^3/2", "sin x", "sqrt(x+1) + 1"]
+questThreeOptions = ["dx", "x^2 dx", "x^10 dx"]
+questFourOptions = ["x * 2/3(x+1)^3/2 - integral(2/3(x+1)^3/2) dx", "x^2 * 4/3(x+1) - integral(4/3) dx", "x * (x+1) - integral(x^2) dx"]
+questFiveOptions = ["2/3 * x * (x+1)^3/2 - 4/15(x+1)^5/2) + C", "3/2 * x * (x+1)^3/2 - 4/15(x+1)^5/2) + C", "2/3 * x * (x+1)^3/2 - 4/15(x+1)^5/2)"]
+questionOptions = [questOneOptions, questTwoOptions, questThreeOptions, questFourOptions, questFiveOptions]
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -161,7 +169,7 @@ update msg model =
             , Cmd.none
             )
         LaodNextQuestion ->
-            ( { model | enableNextQuestion = False, currentQuestion = model.currentQuestion+1 }
+            ( { model | enableNextQuestion = False, currentQuestion = model.currentQuestion+1, question1=-1, question2=-1, question3=-1, question4=-1, question5=-1 }
             , Cmd.none
             )
 
@@ -240,75 +248,50 @@ mainContent model =
             NotFound ->
                 pageNotFound
 
-questionFeedback1 : Model -> Html Msg
-questionFeedback1 model = 
+questionFeedback : Model -> Html Msg
+questionFeedback model = 
     if model.question1 == 1 then
         Alert.simpleSuccess [] [ text "Correct!" ]
     else if model.question1 == 0 then
         Alert.simpleDanger  [] [ text "Incorrect"]
     else 
         div [] []
-get n xs = List.head (List.drop n xs)
-questionFeedback2 : Model -> Html Msg
-questionFeedback2 model = 
-    if model.question2 == 1 then
-        Alert.simpleSuccess [] [ text "Correct!" ]
-    else if model.question2 == 0 then
-        Alert.simpleDanger  [] [ text "Incorrect"]
-    else 
-        div [] []
-
-questionFeedback3 : Model -> Html Msg
-questionFeedback3 model = 
-    if model.question3 == 1 then
-        Alert.simpleSuccess [] [ text "Correct!" ]
-    else if model.question3 == 0 then
-        Alert.simpleDanger  [] [ text "Incorrect"]
-    else 
-        div [] []
-
-questionFeedback4 : Model -> Html Msg
-questionFeedback4 model = 
-    if model.question4 == 1 then
-        Alert.simpleSuccess [] [ text "Correct!" ]
-    else if model.question4 == 0 then
-        Alert.simpleDanger  [] [ text "Incorrect"]
-    else 
-        div [] []
-
-questionFeedback5 : Model -> Html Msg
-questionFeedback5 model = 
-    if model.question5 == 1 then
-        Alert.simpleSuccess [] [ text "Correct!" ]
-    else if model.question5 == 0 then
-        Alert.simpleDanger  [] [ text "Incorrect"]
-    else 
-        div [] []        
-
+     
+questionNotifications = [Question1, Question2, Question3, Question4, Question5]
 pageHome : Model -> List (Html Msg)
 pageHome model =
-    [ h1 [] [ text "Click on an integration technique you want to learn today." ]]
+    [ h1 [] [ text """Click on an integration technique you want to learn today.
+    	Learn the pattern and then try on your own!""" ]]
+
 fromJust : Maybe String -> String
 fromJust x = case x of
     Just y -> y
-    Nothing -> "NotFound"
+    Nothing -> "No"
+
+fromJustList x = case x of
+    Just [y] -> [y]
+    Just [] -> ["h","h"]
+    Nothing -> ["y","y"]
+    Just (xs :: ys :: zz) -> [xs]++[ys]++zz
+
 
 integrationByPartsPage : Model -> List (Html Msg)
 integrationByPartsPage model =
     [ h1 [] [ text "Let's work through an example..." ]
+    , h2 [] [ text "f(x) = ∫ (x) √(x+1)"]
     , Grid.row []
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
-                    [ Block.text [] [ text "Add some question here" ]
-                    ,
-                    Block.text [] [ node "font" [ attribute "size" "6" ] [text "∫"], text " (x * x+1)"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text "Option 1"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 2"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 3"]
-                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text "Option 4"]
-                    , Block.custom <| questionFeedback1 model 
+                    [ Block.text [] [ text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 1 ) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                     , Block.text [] [ text "" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                     , Block.text [] [ text "" ]
+                    , Block.custom <| Button.button [Button.outlinePrimary, Button.attrs [ onClick (Question1 0 ) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+                     , Block.text [] [ text "" ]
+                    , Block.custom <| questionFeedback model 
                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [onClick (LaodNextQuestion)] ] [text "Next question"]
                     ]
                 |> Card.view
