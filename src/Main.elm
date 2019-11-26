@@ -19,6 +19,8 @@ import Bootstrap.Modal as Modal
 import Bootstrap.Alert as Alert
 import Bootstrap.Form.Radio as Radio
 import Bootstrap.Utilities.Spacing as Spacing
+import Markdown.Elm exposing (..)
+import Markdown.Option exposing (..)
 import Array
 import Bootstrap.Text as Text
 
@@ -100,15 +102,6 @@ questionsAnswers model = [model.question1, model.question2, model.question3, mod
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Navbar.subscriptions model.navState NavMsg
-
-questionLabels = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Congratulations!"]
-questions = ["What values would you choose for u and dv?", "What is the value for v?", "What is the value of du?", "Given the general form of integration by parts, what is the substituted formula?", "What is the final answer?", "Good job on working through this complex integration problem. Here is another one that you can try out: f(x) = ∫ (cos(7x+5) dx . To learn more, click on the button below."]
-questOneOptions = ["u = x and dv = sqrt(x+1)", "u = sin x and dv = x^2", "u = v = x^2 + 1"]
-questTwoOptions = ["2/3 (x+1)^3/2", "sin x", "sqrt(x+1) + 1"]
-questThreeOptions = ["dx", "x^2 dx", "x^10 dx"]
-questFourOptions = ["x * 2/3(x+1)^3/2 - integral(2/3(x+1)^3/2) dx", "x^2 * 4/3(x+1) - integral(4/3) dx", "x * (x+1) - integral(x^2) dx"]
-questFiveOptions = ["2/3 * x * (x+1)^3/2 - 4/15(x+1)^5/2) + C", "3/2 * x * (x+1)^3/2 - 4/15(x+1)^5/2) + C", "2/3 * x * (x+1)^3/2 - 4/15(x+1)^5/2)"]
-questionOptions = [questOneOptions, questTwoOptions, questThreeOptions, questFourOptions, questFiveOptions]
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -259,12 +252,23 @@ mainContent model =
             USubstitution ->
                 uSubstitutionPage model
 
-            PartialFractionDecomp -> pageNotFound
+            PartialFractionDecomp -> 
+                partialFractionDecompPage model
 
             NotFound ->
                 pageNotFound
 
-hints = ["Choose u as the first of the following: Inverse Trignometric, Logarithmic, Algebraic, Trignometric, Exponential. If both are the same, order does not matter.", "Integrate dv to get v. General formula for integral of int(x^n) = x^(n+1)/(n+1)", "Differentiate u to get u. General formula for integral of d(x^n) = (x^(n-1))*(n)", "Substitute your v and u into the formula. Formula is int(v)*du= U*V- int(u)*dv ", "Integrate then simplify it to get the answer. Don't forget to add C"]
+
+questionLabels = ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Congratulations!"]
+questions = ["What values would you choose for u and dv?", "What is the value for v?", "What is the value of du?", "Given the general form of integration by parts, what is the substituted formula?", "What is the final answer?", "Good job on working through this complex integration problem. Here is another one that you can try out: f(x) = $ \\int (cos(7x+5) dx $. To learn more, click on the button below."]
+questOneOptions = ["$u = x$ and $dv = \\sqrt{x+1}$", "$u = sin(x)$ and $dv = x^{2}$", "$u = x^{2} + 1$ and $dv = x^{2} + 1$"]
+questTwoOptions = ["$\\frac{2}{3} (x+1)^{3/2}$", "$sin x$", "$\\sqrt{x+1} + 1$"]
+questThreeOptions = ["dx", "$x^{2}$ dx", "$x^{10}$ dx"]
+questFourOptions = ["$ x * \\frac{2}{3} (x+1)^{3/2} - \\int \\frac{2}{3} (x+1)^{3/2} dx$", "$ x^{2} * \\frac{4}{3} (x+1) - \\int \\frac{4}{3} dx$", "$x (x+1) - \\int x^{2} dx$"]
+questFiveOptions = ["$ \\frac{2}{3} * x * (x+1)^{3/2} - \\frac{4}{15} (x+1)^{5/2}$ + C", "$\\frac{3}{2} * x * (x+1)^{3/2} - \\frac{4}{15} (x+1)^{5/2}$ + C", "$\\frac{2}{3} * x * (x+1)^{3/2} - \\frac{4}{15} (x+1)^{5/2}$"]
+questionOptions = [questOneOptions, questTwoOptions, questThreeOptions, questFourOptions, questFiveOptions]
+
+hints = ["Choose $u$ as the first of the following: Inverse Trignometric, Logarithmic, Algebraic, Trignometric, Exponential. If both $u$ and $dv$ are the same type, the order does not matter.", "Integrate $dv$ to obtain $v$. Integral formula for polynomials is : $\\int x^{n} = \\frac{x^{n+1}}{n+1}$", "Differentiate $u$ to get $du$. Derivative Formula for polynomials is : $\\frac{d u^{n}}{dx} = u^{n-1} * n $", "Substitute $v$ and $u$ into the formula. Formula: $\\int u * dv = u * v - \\int v * du $", "Integrate then simplify it to get the answer. Don't forget to add C"]
 
 questionFeedback : Model -> Html Msg
 questionFeedback model = 
@@ -287,7 +291,7 @@ pageHome model =
     	Learn the pattern and then try on your own!""" ]]
 
 showHint model = if model.showHintEnabled == True then 
-   Alert.simpleWarning [] [ text (fromJust(Array.get (model.currentQuestion-1) (Array.fromList(hints)))) ]
+   Alert.simpleWarning [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (model.currentQuestion-1) (Array.fromList(hints)))) ]
    else  div [] []
 checkIfSelected model number = 
     if fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model))) == number then 
@@ -328,33 +332,34 @@ renderOption1 model =
     if (model.currentQuestion-1) == 5 then
         div [] []
     else
-        Button.button [(checkIfSelected model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [text (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))] 
+        Button.button [(checkIfSelected model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 1) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions))))))) ]
+        
 
 renderOption2: Model -> Html Msg
 renderOption2 model = 
     if (model.currentQuestion-1) == 5 then
         div [] []
     else 
-        Button.button [(checkIfSelected model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 2 ) ] ] [text (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+        Button.button [(checkIfSelected model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 2 ) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
 
 renderOption3: Model -> Html Msg
 renderOption3 model = 
     if (model.currentQuestion-1) == 5 then
         div [] []
     else 
-        Button.button [(checkIfSelected model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 3) ] ] [text (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
+        Button.button [(checkIfSelected model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion-1) (Array.fromList (questionNotifications)))) 3) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion-1) (Array.fromList(questionOptions)))))))]
 
 
 integrationByPartsPage : Model -> List (Html Msg)
 integrationByPartsPage model =
     [ h1 [] [ text "Let's work through an example..." ]
-    , h2 [] [ text "f(x) = ∫ (x) √(x+1)"]
+    , h2 [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath "$f(x) = \\int x \\sqrt{x+1}$" ]
     , Grid.row []
         [ Grid.col []
             [ Card.config [ Card.outlinePrimary ]
                 |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
-                    [ Block.text [] [ text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
+                    [ Block.text [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
                     , Block.custom <| (renderNewButton (model.currentQuestion-1))
                     , Block.custom <| (renderOption1 model)
                     , Block.text [] [ text "" ]
@@ -365,20 +370,16 @@ integrationByPartsPage model =
                     , Block.custom <| (questionFeedback model) 
                     , Block.text [] [ text "" ]
                     , Block.custom <| (showHint model)]
-                |> Card.block [ Block.align Text.alignXsCenter ] [
+                |> Card.block [ Block.align Text.alignXsCenter ] 
+                    [
                      Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion)), Button.attrs [Spacing.mr5, onClick (LoadPreviousQuestion)] ] [text "Previous question"]
-                     
                      , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (isLastQuestion model), Button.attrs [Spacing.ml5,Spacing.mr5, onClick (ShowHintForQuestion)] ] [text "Hint"]
-                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [ Spacing.ml5, onClick (LoadNextQuestion)] ] [text "Next question"]]
-
-                 
-
-                    
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion)), Button.attrs [ Spacing.ml5, onClick (LoadNextQuestion)] ] [text "Next question"]
+                    ]
                 |> Card.view
             ]
         ]
     , br [] []
-    
     ]
 
 
@@ -408,12 +409,12 @@ pageModules model =
 
 uSubstitutionPage : Model -> List (Html Msg)
 uSubstitutionPage model =
-    [ h1 [] [ text "Modules" ]
-    , Listgroup.ul
-        [ Listgroup.li [] [ text "Alert" ]
-        , Listgroup.li [] [ text "Badge" ]
-        , Listgroup.li [] [ text "Card" ]
-        ]
+    [ h1 [] [ text "uSubstitution" ]
+    ]
+
+partialFractionDecompPage : Model -> List (Html Msg)
+partialFractionDecompPage model =
+    [ h1 [] [ text "partialFractionDecomp" ]
     ]
 
 pageNotFound : List (Html Msg)
