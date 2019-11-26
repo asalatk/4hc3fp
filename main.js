@@ -12432,7 +12432,7 @@ var author$project$Main$pageHome = function (model) {
 			_List_Nil,
 			_List_fromArray(
 				[
-					elm$html$Html$text('Click on an integration technique you want to learn today.\n    	Learn the pattern and then try on your own!')
+					elm$html$Html$text('Click on an integration technique you want to learn today.\r\n    	Learn the pattern and then try on your own!')
 				]))
 		]);
 };

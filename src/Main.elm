@@ -175,7 +175,7 @@ update msg model =
             , Cmd.none
             )
         LoadPreviousQuestion ->
-            ( { model |currentQuestion = model.currentQuestion-1, enablePreviousQuestion= (if model.currentQuestion > 2 then True else False), enableNextQuestion = True }
+            ( { model |currentQuestion = model.currentQuestion-1, showHintEnabled = False, enablePreviousQuestion= (if model.currentQuestion > 2 then True else False), enableNextQuestion = True }
             , Cmd.none
             )
 
