@@ -7510,7 +7510,7 @@ var rundis$elm_bootstrap$Bootstrap$Internal$Button$Roled = function (a) {
 };
 var rundis$elm_bootstrap$Bootstrap$Button$primary = rundis$elm_bootstrap$Bootstrap$Internal$Button$Coloring(
 	rundis$elm_bootstrap$Bootstrap$Internal$Button$Roled(rundis$elm_bootstrap$Bootstrap$Internal$Button$Primary));
-var author$project$Main$renderNewButton = function (value) {
+var author$project$Main$renderLinkButton = function (value) {
 	return (value === 5) ? A2(
 		rundis$elm_bootstrap$Bootstrap$Button$linkButton,
 		_List_fromArray(
@@ -12364,7 +12364,7 @@ var author$project$Main$integrationByPartsPage = function (model) {
 															elm$core$Array$fromList(author$project$Main$questions))))
 												])),
 											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
-											author$project$Main$renderNewButton(model.currentQuestion - 1)),
+											author$project$Main$renderLinkButton(model.currentQuestion - 1)),
 											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
 											author$project$Main$renderOption1(model)),
 											A2(

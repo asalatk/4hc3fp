@@ -234,7 +234,7 @@ menu model =
         |> Navbar.items
             [ Navbar.itemLink [ href "#IntegrationByParts" ] [ text "Integration By Parts" ]
             , Navbar.itemLink [ href "#USubstitution" ] [ text "U Subsitution" ]
-              , Navbar.itemLink [ href "#PartialFractionDecomp" ] [ text "Partial Fraction Decomposition" ]
+            , Navbar.itemLink [ href "#PartialFractionDecomp" ] [ text "Partial Fraction Decomposition" ]
             ]
         |> Navbar.view model.navState
 
@@ -280,19 +280,28 @@ questionFeedback model =
     else 
         div [] []
 
-
-
-isLastQuestion model = if model.currentQuestion ==6 then True else False 
 questionNotifications = [Question1, Question2, Question3, Question4, Question5]
+
+isLastQuestion model = 
+    if (model.currentQuestion == 6) then 
+        True 
+    else 
+        False 
 
 pageHome : Model -> List (Html Msg)
 pageHome model =
-    [ h1 [] [ text """Click on an integration technique you want to learn today.
-    	Learn the pattern and then try on your own!""" ]]
+    [ h1 [] 
+        [ text """Click on an integration technique you want to learn today.
+    	Learn the pattern and then try on your own!""" 
+        ]
+    ]
 
-showHint model = if model.showHintEnabled == True then 
-   Alert.simpleWarning [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (model.currentQuestion-1) (Array.fromList(hints)))) ]
-   else  div [] []
+showHint model = 
+    if model.showHintEnabled == True then 
+        Alert.simpleWarning [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (model.currentQuestion-1) (Array.fromList(hints)))) ]
+    else
+        div [] []
+
 checkIfSelected model number = 
     if fromJustInt (Array.get (model.currentQuestion-1) (Array.fromList (questionsAnswers model))) == number then 
         Button.primary 
@@ -320,8 +329,8 @@ fromJustList x = case x of
     Just (xs :: ys :: zz) -> [xs]++[ys]++zz
 
 
-renderNewButton: Int -> Html Msg
-renderNewButton value = 
+renderLinkButton: Int -> Html Msg
+renderLinkButton value = 
     if value == 5 then
         Button.linkButton [ Button.primary, Button.attrs [ href "#USubstitution"] ] [ text "Go to USubstitution" ]
     else 
@@ -360,7 +369,7 @@ integrationByPartsPage model =
                 |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questionLabels)))) ]
                 |> Card.block []
                     [ Block.text [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust (Array.get (model.currentQuestion-1) (Array.fromList questions))) ]
-                    , Block.custom <| (renderNewButton (model.currentQuestion-1))
+                    , Block.custom <| (renderLinkButton (model.currentQuestion-1))
                     , Block.custom <| (renderOption1 model)
                     , Block.text [] [ text "" ]
                     , Block.custom <| (renderOption2 model)
@@ -396,7 +405,7 @@ pageGettingStarted model =
     ]
 
 
-
+{--
 pageModules : Model -> List (Html Msg)
 pageModules model =
     [ h1 [] [ text "Modules" ]
@@ -406,6 +415,7 @@ pageModules model =
         , Listgroup.li [] [ text "Card" ]
         ]
     ]
+--}
 
 uSubstitutionPage : Model -> List (Html Msg)
 uSubstitutionPage model =
@@ -422,8 +432,6 @@ pageNotFound =
     [ h1 [] [ text "Not found" ]
     , text "SOrry couldn't find that page"
     ]
-
-
 
 modal : Model -> Html Msg
 modal model =
