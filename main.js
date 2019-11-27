@@ -12434,6 +12434,16 @@ var author$project$Main$pageHome = function (model) {
 			_List_fromArray(
 				[
 					elm$html$Html$text('Click on an integration technique you want to learn today.\n    	Learn the pattern and then try on your own!')
+				])),
+			A2(
+			elm$html$Html$h5,
+			_List_fromArray(
+				[
+					A2(elm$html$Html$Attributes$attribute, 'style', 'position: fixed;left: 0;bottom: 0;width: 100%;color: black;text-align: center')
+				]),
+			_List_fromArray(
+				[
+					elm$html$Html$text('Made with ♥ by Asalat, Razan, Hamid, and Prithvi')
 				]))
 		]);
 };
