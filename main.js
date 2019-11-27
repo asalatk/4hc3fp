@@ -7012,7 +7012,8 @@ var author$project$Main$update = F2(
 						{
 							currentQuestion: model.currentQuestion - 1,
 							enableNextQuestion: true,
-							enablePreviousQuestion: (model.currentQuestion > 2) ? true : false
+							enablePreviousQuestion: (model.currentQuestion > 2) ? true : false,
+							showHintEnabled: false
 						}),
 					elm$core$Platform$Cmd$none);
 			default:
@@ -12432,7 +12433,7 @@ var author$project$Main$pageHome = function (model) {
 			_List_Nil,
 			_List_fromArray(
 				[
-					elm$html$Html$text('Click on an integration technique you want to learn today.\r\n    	Learn the pattern and then try on your own!')
+					elm$html$Html$text('Click on an integration technique you want to learn today.\n    	Learn the pattern and then try on your own!')
 				]))
 		]);
 };
