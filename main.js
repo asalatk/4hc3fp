@@ -6131,7 +6131,7 @@ var author$project$Main$init = F3(
 		var _n1 = A2(
 			author$project$Main$urlUpdate,
 			url,
-			{currentQuestion: 1, enableNextQuestion: false, enablePreviousQuestion: false, lastSubmittedAnswer: 0, modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$hidden, navKey: key, navState: navState, page: author$project$Main$Home, question1: -1, question2: -1, question3: -1, question4: -1, question5: -1, showHintEnabled: false});
+			{currentQuestion: 1, currentQuestion1: 1, enableNextQuestion: false, enableNextQuestion1: false, enablePreviousQuestion: false, enablePreviousQuestion1: false, lastSubmittedAnswer: 0, modalVisibility: rundis$elm_bootstrap$Bootstrap$Modal$hidden, navKey: key, navState: navState, page: author$project$Main$Home, question1: -1, question11: -1, question2: -1, question21: -1, question3: -1, question31: -1, question4: -1, question41: -1, question5: -1, question51: -1, showHintEnabled: false, showHintEnabled1: false});
 		var model = _n1.a;
 		var urlCmd = _n1.b;
 		return _Utils_Tuple2(
@@ -6743,6 +6743,10 @@ var author$project$Main$questionsAnswers = function (model) {
 	return _List_fromArray(
 		[model.question1, model.question2, model.question3, model.question4, model.question5]);
 };
+var author$project$Main$questionsAnswers1 = function (model) {
+	return _List_fromArray(
+		[model.question11, model.question21, model.question31, model.question41, model.question51]);
+};
 var elm$browser$Browser$Navigation$load = _Browser_load;
 var elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
 var elm$core$Array$fromListHelp = F3(
@@ -7016,11 +7020,94 @@ var author$project$Main$update = F2(
 							showHintEnabled: false
 						}),
 					elm$core$Platform$Cmd$none);
-			default:
+			case 'ShowHintForQuestion':
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{showHintEnabled: !model.showHintEnabled}),
+					elm$core$Platform$Cmd$none);
+			case 'LoadNextQuestion1':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							currentQuestion1: model.currentQuestion1 + 1,
+							enableNextQuestion1: author$project$Main$fromJustInt(
+								A2(
+									elm$core$Array$get,
+									model.currentQuestion1,
+									elm$core$Array$fromList(
+										author$project$Main$questionsAnswers1(model)))) === 1,
+							enablePreviousQuestion1: (model.currentQuestion1 > 0) ? true : false,
+							showHintEnabled1: false
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'LoadPreviousQuestion1':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							currentQuestion1: model.currentQuestion1 - 1,
+							enableNextQuestion1: true,
+							enablePreviousQuestion1: (model.currentQuestion1 > 2) ? true : false,
+							showHintEnabled1: false
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'Question11':
+				var value = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							enableNextQuestion1: A2(author$project$Main$checkIfCorrectAnswer, 1, value),
+							question11: value
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'Question21':
+				var value = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							enableNextQuestion1: A2(author$project$Main$checkIfCorrectAnswer, 2, value),
+							question21: value
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'Question31':
+				var value = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							enableNextQuestion1: A2(author$project$Main$checkIfCorrectAnswer, 3, value),
+							question31: value
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'Question41':
+				var value = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							enableNextQuestion1: A2(author$project$Main$checkIfCorrectAnswer, 4, value),
+							question41: value
+						}),
+					elm$core$Platform$Cmd$none);
+			case 'Question51':
+				var value = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							enableNextQuestion1: A2(author$project$Main$checkIfCorrectAnswer, 5, value),
+							question51: value
+						}),
+					elm$core$Platform$Cmd$none);
+			default:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{showHintEnabled1: !model.showHintEnabled1}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -12433,10 +12520,21 @@ var author$project$Main$pageHome = function (model) {
 			_List_Nil,
 			_List_fromArray(
 				[
-					elm$html$Html$text('Click on an integration technique you want to learn today.\n    	Learn the pattern and then try on your own!')
+					elm$html$Html$text('Click on an Integration Technique you want to learn today.\n        Learn the pattern and then try on your own!')
+				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil),
+			A2(
+			elm$html$Html$h2,
+			_List_fromArray(
+				[
+					A2(elm$html$Html$Attributes$attribute, 'style', 'color: red;text-align: center')
+				]),
+			_List_fromArray(
+				[
+					A2(jxxcarlson$elm_markdown$Markdown$Elm$toHtml, jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath, 'Impress your friends by learning integration techniques from our modules')
 				])),
 			A2(
-			elm$html$Html$h5,
+			elm$html$Html$h4,
 			_List_fromArray(
 				[
 					A2(elm$html$Html$Attributes$attribute, 'style', 'position: fixed;left: 0;bottom: 0;width: 100%;color: black;text-align: center')
@@ -12470,6 +12568,204 @@ var author$project$Main$partialFractionDecompPage = function (model) {
 				]))
 		]);
 };
+var author$project$Main$LoadNextQuestion1 = {$: 'LoadNextQuestion1'};
+var author$project$Main$LoadPreviousQuestion1 = {$: 'LoadPreviousQuestion1'};
+var author$project$Main$ShowHintForQuestion1 = {$: 'ShowHintForQuestion1'};
+var author$project$Main$isLastQuestion1 = function (model) {
+	return (model.currentQuestion1 === 6) ? true : false;
+};
+var author$project$Main$questionFeedback1 = function (model) {
+	return (author$project$Main$fromJustInt(
+		A2(
+			elm$core$Array$get,
+			model.currentQuestion1 - 1,
+			elm$core$Array$fromList(
+				author$project$Main$questionsAnswers1(model)))) === 1) ? A2(
+		rundis$elm_bootstrap$Bootstrap$Alert$simpleSuccess,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text('Correct!')
+			])) : (((author$project$Main$fromJustInt(
+		A2(
+			elm$core$Array$get,
+			model.currentQuestion1 - 1,
+			elm$core$Array$fromList(
+				author$project$Main$questionsAnswers1(model)))) === 2) || (author$project$Main$fromJustInt(
+		A2(
+			elm$core$Array$get,
+			model.currentQuestion1 - 1,
+			elm$core$Array$fromList(
+				author$project$Main$questionsAnswers1(model)))) === 3)) ? A2(
+		rundis$elm_bootstrap$Bootstrap$Alert$simpleDanger,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text('Incorrect')
+			])) : A2(elm$html$Html$div, _List_Nil, _List_Nil));
+};
+var author$project$Main$questions1 = _List_fromArray(
+	['q1', 'q2', 'q3', 'q4', 'q5']);
+var author$project$Main$checkIfSelected1 = F2(
+	function (model, number) {
+		return _Utils_eq(
+			author$project$Main$fromJustInt(
+				A2(
+					elm$core$Array$get,
+					model.currentQuestion1 - 1,
+					elm$core$Array$fromList(
+						author$project$Main$questionsAnswers1(model)))),
+			number) ? rundis$elm_bootstrap$Bootstrap$Button$primary : rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary;
+	});
+var author$project$Main$Question11 = function (a) {
+	return {$: 'Question11', a: a};
+};
+var author$project$Main$Question21 = function (a) {
+	return {$: 'Question21', a: a};
+};
+var author$project$Main$Question31 = function (a) {
+	return {$: 'Question31', a: a};
+};
+var author$project$Main$Question41 = function (a) {
+	return {$: 'Question41', a: a};
+};
+var author$project$Main$Question51 = function (a) {
+	return {$: 'Question51', a: a};
+};
+var author$project$Main$questionNotifications1 = _List_fromArray(
+	[author$project$Main$Question11, author$project$Main$Question21, author$project$Main$Question31, author$project$Main$Question41, author$project$Main$Question51]);
+var author$project$Main$questFiveOptions1 = _List_fromArray(
+	['op5', 'op5', 'op5']);
+var author$project$Main$questFourOptions1 = _List_fromArray(
+	['op4', 'op4', 'op4']);
+var author$project$Main$questOneOptions1 = _List_fromArray(
+	['op1', 'op1', 'op1']);
+var author$project$Main$questThreeOptions1 = _List_fromArray(
+	['op3', 'op3', 'op3']);
+var author$project$Main$questTwoOptions1 = _List_fromArray(
+	['op2', 'op2', 'op2']);
+var author$project$Main$questionOptions1 = _List_fromArray(
+	[author$project$Main$questOneOptions1, author$project$Main$questTwoOptions1, author$project$Main$questThreeOptions1, author$project$Main$questFourOptions1, author$project$Main$questFiveOptions1]);
+var author$project$Main$renderOption11 = function (model) {
+	return ((model.currentQuestion1 - 1) === 5) ? A2(elm$html$Html$div, _List_Nil, _List_Nil) : A2(
+		rundis$elm_bootstrap$Bootstrap$Button$button,
+		_List_fromArray(
+			[
+				A2(author$project$Main$checkIfSelected1, model, 1),
+				rundis$elm_bootstrap$Bootstrap$Button$attrs(
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(
+						author$project$Main$fromJustMsg(
+							A2(
+								elm$core$Array$get,
+								model.currentQuestion1 - 1,
+								elm$core$Array$fromList(author$project$Main$questionNotifications1)))(1))
+					]))
+			]),
+		_List_fromArray(
+			[
+				A2(
+				jxxcarlson$elm_markdown$Markdown$Elm$toHtml,
+				jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath,
+				author$project$Main$fromJust(
+					A2(
+						elm$core$Array$get,
+						0,
+						elm$core$Array$fromList(
+							author$project$Main$fromJustList(
+								A2(
+									elm$core$Array$get,
+									model.currentQuestion1 - 1,
+									elm$core$Array$fromList(author$project$Main$questionOptions1)))))))
+			]));
+};
+var author$project$Main$renderOption21 = function (model) {
+	return ((model.currentQuestion1 - 1) === 5) ? A2(elm$html$Html$div, _List_Nil, _List_Nil) : A2(
+		rundis$elm_bootstrap$Bootstrap$Button$button,
+		_List_fromArray(
+			[
+				A2(author$project$Main$checkIfSelected1, model, 2),
+				rundis$elm_bootstrap$Bootstrap$Button$attrs(
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(
+						author$project$Main$fromJustMsg(
+							A2(
+								elm$core$Array$get,
+								model.currentQuestion1 - 1,
+								elm$core$Array$fromList(author$project$Main$questionNotifications1)))(2))
+					]))
+			]),
+		_List_fromArray(
+			[
+				A2(
+				jxxcarlson$elm_markdown$Markdown$Elm$toHtml,
+				jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath,
+				author$project$Main$fromJust(
+					A2(
+						elm$core$Array$get,
+						1,
+						elm$core$Array$fromList(
+							author$project$Main$fromJustList(
+								A2(
+									elm$core$Array$get,
+									model.currentQuestion1 - 1,
+									elm$core$Array$fromList(author$project$Main$questionOptions1)))))))
+			]));
+};
+var author$project$Main$renderOption31 = function (model) {
+	return ((model.currentQuestion1 - 1) === 5) ? A2(elm$html$Html$div, _List_Nil, _List_Nil) : A2(
+		rundis$elm_bootstrap$Bootstrap$Button$button,
+		_List_fromArray(
+			[
+				A2(author$project$Main$checkIfSelected1, model, 3),
+				rundis$elm_bootstrap$Bootstrap$Button$attrs(
+				_List_fromArray(
+					[
+						elm$html$Html$Events$onClick(
+						author$project$Main$fromJustMsg(
+							A2(
+								elm$core$Array$get,
+								model.currentQuestion1 - 1,
+								elm$core$Array$fromList(author$project$Main$questionNotifications1)))(3))
+					]))
+			]),
+		_List_fromArray(
+			[
+				A2(
+				jxxcarlson$elm_markdown$Markdown$Elm$toHtml,
+				jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath,
+				author$project$Main$fromJust(
+					A2(
+						elm$core$Array$get,
+						2,
+						elm$core$Array$fromList(
+							author$project$Main$fromJustList(
+								A2(
+									elm$core$Array$get,
+									model.currentQuestion1 - 1,
+									elm$core$Array$fromList(author$project$Main$questionOptions1)))))))
+			]));
+};
+var author$project$Main$hints1 = _List_fromArray(
+	['h1', 'h2', 'h3', 'h4', 'h5']);
+var author$project$Main$showHint1 = function (model) {
+	return model.showHintEnabled1 ? A2(
+		rundis$elm_bootstrap$Bootstrap$Alert$simpleWarning,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				jxxcarlson$elm_markdown$Markdown$Elm$toHtml,
+				jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath,
+				author$project$Main$fromJust(
+					A2(
+						elm$core$Array$get,
+						model.currentQuestion1 - 1,
+						elm$core$Array$fromList(author$project$Main$hints1))))
+			])) : A2(elm$html$Html$div, _List_Nil, _List_Nil);
+};
 var author$project$Main$uSubstitutionPage = function (model) {
 	return _List_fromArray(
 		[
@@ -12478,8 +12774,167 @@ var author$project$Main$uSubstitutionPage = function (model) {
 			_List_Nil,
 			_List_fromArray(
 				[
-					elm$html$Html$text('uSubstitution')
-				]))
+					elm$html$Html$text('Let\'s work through an example...')
+				])),
+			A2(
+			elm$html$Html$h2,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(jxxcarlson$elm_markdown$Markdown$Elm$toHtml, jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath, '$f(x) =  \\int cos(7x+5) dx $')
+				])),
+			A2(
+			rundis$elm_bootstrap$Bootstrap$Grid$row,
+			_List_Nil,
+			_List_fromArray(
+				[
+					A2(
+					rundis$elm_bootstrap$Bootstrap$Grid$col,
+					_List_Nil,
+					_List_fromArray(
+						[
+							rundis$elm_bootstrap$Bootstrap$Card$view(
+							A3(
+								rundis$elm_bootstrap$Bootstrap$Card$block,
+								_List_fromArray(
+									[
+										rundis$elm_bootstrap$Bootstrap$Card$Block$align(rundis$elm_bootstrap$Bootstrap$Text$alignXsCenter)
+									]),
+								_List_fromArray(
+									[
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(!model.enablePreviousQuestion1),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mr5,
+															elm$html$Html$Events$onClick(author$project$Main$LoadPreviousQuestion1)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Previous question')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(
+													author$project$Main$isLastQuestion1(model)),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml5,
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$mr5,
+															elm$html$Html$Events$onClick(author$project$Main$ShowHintForQuestion1)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Hint')
+												]))),
+										rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+										A2(
+											rundis$elm_bootstrap$Bootstrap$Button$button,
+											_List_fromArray(
+												[
+													rundis$elm_bootstrap$Bootstrap$Button$outlinePrimary,
+													rundis$elm_bootstrap$Bootstrap$Button$disabled(!model.enableNextQuestion1),
+													rundis$elm_bootstrap$Bootstrap$Button$attrs(
+													_List_fromArray(
+														[
+															rundis$elm_bootstrap$Bootstrap$Utilities$Spacing$ml5,
+															elm$html$Html$Events$onClick(author$project$Main$LoadNextQuestion1)
+														]))
+												]),
+											_List_fromArray(
+												[
+													elm$html$Html$text('Next question')
+												])))
+									]),
+								A3(
+									rundis$elm_bootstrap$Bootstrap$Card$block,
+									_List_Nil,
+									_List_fromArray(
+										[
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													A2(
+													jxxcarlson$elm_markdown$Markdown$Elm$toHtml,
+													jxxcarlson$elm_markdown$Markdown$Option$ExtendedMath,
+													author$project$Main$fromJust(
+														A2(
+															elm$core$Array$get,
+															model.currentQuestion1 - 1,
+															elm$core$Array$fromList(author$project$Main$questions1))))
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderOption11(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderOption21(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$renderOption31(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$questionFeedback1(model)),
+											A2(
+											rundis$elm_bootstrap$Bootstrap$Card$Block$text,
+											_List_Nil,
+											_List_fromArray(
+												[
+													elm$html$Html$text('')
+												])),
+											rundis$elm_bootstrap$Bootstrap$Card$Block$custom(
+											author$project$Main$showHint1(model))
+										]),
+									A3(
+										rundis$elm_bootstrap$Bootstrap$Card$headerH4,
+										_List_Nil,
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												author$project$Main$fromJust(
+													A2(
+														elm$core$Array$get,
+														model.currentQuestion1 - 1,
+														elm$core$Array$fromList(author$project$Main$questionLabels))))
+											]),
+										rundis$elm_bootstrap$Bootstrap$Card$config(
+											_List_fromArray(
+												[rundis$elm_bootstrap$Bootstrap$Card$outlinePrimary]))))))
+						]))
+				])),
+			A2(elm$html$Html$br, _List_Nil, _List_Nil)
 		]);
 };
 var rundis$elm_bootstrap$Bootstrap$Grid$container = F2(

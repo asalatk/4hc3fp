@@ -44,6 +44,15 @@ type alias Model =
     , enableNextQuestion: Bool
     , enablePreviousQuestion: Bool
     , showHintEnabled : Bool
+    , question11 : Int
+    , question21 : Int
+    , question31 : Int
+    , question41 : Int
+    , question51 : Int
+    , currentQuestion1: Int
+    , enableNextQuestion1: Bool
+    , enablePreviousQuestion1: Bool
+    , showHintEnabled1 : Bool
     }
 
 type Page
@@ -72,7 +81,7 @@ init flags url key =
             Navbar.initialState NavMsg
 
         ( model, urlCmd ) =
-            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, showHintEnabled=False, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False, enablePreviousQuestion=False  }
+            urlUpdate url { navKey = key, navState = navState, page = Home, modalVisibility= Modal.hidden, showHintEnabled=False, question1 = -1, question2 = -1 , question3 = -1 , question4 = -1 ,question5 = -1, currentQuestion = 1, lastSubmittedAnswer =0, enableNextQuestion=False, enablePreviousQuestion=False, currentQuestion1 = 1, question11 = -1, question21 = -1 , question31 = -1 , question41 = -1 ,question51 = -1, enableNextQuestion1=False, enablePreviousQuestion1=False, showHintEnabled1=False}
     in
         ( model, Cmd.batch [ urlCmd, navCmd ] )
 
@@ -97,6 +106,14 @@ type Msg
     | LoadPreviousQuestion
     | LoadNextQuestion 
     | ShowHintForQuestion
+    | Question11 Int
+    | Question21 Int
+    | Question31 Int
+    | Question41 Int
+    | Question51 Int
+    | LoadPreviousQuestion1
+    | LoadNextQuestion1
+    | ShowHintForQuestion1
 
 questionsAnswers model = [model.question1, model.question2, model.question3, model.question4, model.question5]
 subscriptions : Model -> Sub Msg
@@ -135,6 +152,7 @@ update msg model =
 
         UpdateLastSubmittedAnswer answer -> ({model | lastSubmittedAnswer = answer}
             , Cmd.none)
+
         Question1 value ->
             ( { model | question1 = value, enableNextQuestion = (checkIfCorrectAnswer 1 value)}
             , Cmd.none
@@ -162,6 +180,7 @@ update msg model =
             ( { model | question5 = value, enableNextQuestion = (checkIfCorrectAnswer 5 value) }
             , Cmd.none
             )
+
         EnableNextQuestion value ->
             ( { model | enableNextQuestion = value }
             , Cmd.none
@@ -184,7 +203,52 @@ update msg model =
             , Cmd.none
             )
 
-checkIfCorrectAnswer quNumber value = if value == 1 then True else False
+        LoadNextQuestion1 ->
+            ( { model | showHintEnabled1=False, enableNextQuestion1 = (fromJustInt (Array.get (model.currentQuestion1) (Array.fromList (questionsAnswers1 model))) == 1), currentQuestion1 = (model.currentQuestion1 + 1), enablePreviousQuestion1 = (if model.currentQuestion1 > 0 then True else False) }
+            , Cmd.none
+            )
+        LoadPreviousQuestion1 ->
+            ( { model |currentQuestion1 = model.currentQuestion1-1, showHintEnabled1 = False, enablePreviousQuestion1= (if model.currentQuestion1 > 2 then True else False), enableNextQuestion1 = True }
+            , Cmd.none
+            )
+
+        Question11 value ->
+            ( { model | question11 = value, enableNextQuestion1 = (checkIfCorrectAnswer 1 value)}
+            , Cmd.none
+            )
+
+        Question21 value ->
+            ( { model | question21 = value, enableNextQuestion1 = (checkIfCorrectAnswer 2 value) }
+            , Cmd.none
+            )
+
+        Question31 value ->
+            ( { model | question31 = value, enableNextQuestion1 = (checkIfCorrectAnswer 3 value) }
+            , Cmd.none
+            )
+
+        Question41 value ->
+            ( { model | question41 = value, enableNextQuestion1 = (checkIfCorrectAnswer 4 value) }
+            , Cmd.none
+            )
+
+        Question51 value ->
+            ( { model | question51 = value, enableNextQuestion1 = (checkIfCorrectAnswer 5 value) }
+            , Cmd.none
+            )    
+
+        ShowHintForQuestion1 -> 
+            ({ model | showHintEnabled1 = not (model.showHintEnabled1) }
+            , Cmd.none
+            )
+
+checkIfCorrectAnswer quNumber value = 
+    if value == 1 then 
+        True 
+    else 
+        False
+
+
 urlUpdate : Url -> Model -> ( Model, Cmd Msg )
 urlUpdate url model =
     case decode url of
@@ -290,11 +354,11 @@ isLastQuestion model =
 
 pageHome : Model -> List (Html Msg)
 pageHome model =
-    [   h1 [] 
-        [ text """Click on an integration technique you want to learn today.
-    	Learn the pattern and then try on your own!""" 
-        ],
-        h5 [attribute "style" "position: fixed;left: 0;bottom: 0;width: 100%;color: black;text-align: center"] [text "Made with ♥ by Asalat, Razan, Hamid, and Prithvi"]
+    [   h1 [] [ text """Click on an Integration Technique you want to learn today.
+        Learn the pattern and then try on your own!"""],
+        br [] [],
+        h2 [attribute "style" "color: red;text-align: center"] [Markdown.Elm.toHtml Markdown.Option.ExtendedMath "Impress your friends by learning integration techniques from our modules"],
+        h4 [attribute "style" "position: fixed;left: 0;bottom: 0;width: 100%;color: black;text-align: center"] [text "Made with ♥ by Asalat, Razan, Hamid, and Prithvi"]
     ]
 
 showHint model = 
@@ -392,6 +456,277 @@ integrationByPartsPage model =
     , br [] []
     ]
 
+uSubstitutionPage : Model -> List (Html Msg)
+uSubstitutionPage model =
+    [ h1 [] [ text "Let's work through an example..." ]
+    , h2 [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath "$f(x) =  \\int cos(7x+5) dx $" ]
+    , Grid.row []
+        [ Grid.col []
+            [ Card.config [ Card.outlinePrimary ]
+                |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion1-1) (Array.fromList questionLabels)))) ]
+                |> Card.block []
+                    [ Block.text [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust (Array.get (model.currentQuestion1-1) (Array.fromList questions1))) ]
+                    , Block.custom <| (renderOption11 model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (renderOption21 model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (renderOption31 model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (questionFeedback1 model) 
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (showHint1 model)]
+                |> Card.block [ Block.align Text.alignXsCenter ] 
+                    [
+                     Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion1)), Button.attrs [Spacing.mr5, onClick (LoadPreviousQuestion1)] ] [text "Previous question"]
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (isLastQuestion1 model), Button.attrs [Spacing.ml5,Spacing.mr5, onClick (ShowHintForQuestion1)] ] [text "Hint"]
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion1)), Button.attrs [ Spacing.ml5, onClick (LoadNextQuestion1)] ] [text "Next question"]
+                    ]
+                |> Card.view
+            ]
+        ]
+    , br [] []
+    ]
+
+questionsAnswers1 model = [model.question11, model.question21, model.question31, model.question41, model.question51]
+questions1 = ["q1","q2","q3","q4","q5"]
+questOneOptions1 = ["op1","op1","op1"]
+questTwoOptions1 = ["op2","op2","op2"]
+questThreeOptions1 = ["op3","op3","op3"]
+questFourOptions1 = ["op4","op4","op4"]
+questFiveOptions1 =["op5","op5","op5"]
+questionOptions1 = [questOneOptions1, questTwoOptions1, questThreeOptions1, questFourOptions1, questFiveOptions1]
+hints1 = ["h1","h2","h3","h4","h5"]
+questionNotifications1 = [Question11, Question21, Question31, Question41, Question51]
+
+questionFeedback1 : Model -> Html Msg
+questionFeedback1 model = 
+    if (fromJustInt (Array.get (model.currentQuestion1-1) (Array.fromList (questionsAnswers1 model)))) == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if (fromJustInt (Array.get (model.currentQuestion1-1) (Array.fromList (questionsAnswers1 model)))) ==2  ||  
+            (fromJustInt (Array.get (model.currentQuestion1-1) (Array.fromList (questionsAnswers1 model)))) ==3 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+isLastQuestion1 model = 
+    if (model.currentQuestion1 == 6) then 
+        True 
+    else 
+        False 
+
+showHint1 model = 
+    if model.showHintEnabled1 == True then 
+        Alert.simpleWarning [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (model.currentQuestion1-1) (Array.fromList(hints1)))) ]
+    else
+        div [] []
+
+checkIfSelected1 model number = 
+    if fromJustInt (Array.get (model.currentQuestion1-1) (Array.fromList (questionsAnswers1 model))) == number then 
+        Button.primary 
+    else 
+        Button.outlinePrimary
+
+renderOption11: Model -> Html Msg
+renderOption11 model = 
+    if (model.currentQuestion1-1) == 5 then
+        div [] []
+    else
+        Button.button [(checkIfSelected1 model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion1-1) (Array.fromList (questionNotifications1)))) 1) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion1-1) (Array.fromList(questionOptions1))))))) ]
+        
+
+renderOption21: Model -> Html Msg
+renderOption21 model = 
+    if (model.currentQuestion1-1) == 5 then
+        div [] []
+    else 
+        Button.button [(checkIfSelected1 model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion1-1) (Array.fromList (questionNotifications1)))) 2 ) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion1-1) (Array.fromList(questionOptions1)))))))]
+
+renderOption31: Model -> Html Msg
+renderOption31 model = 
+    if (model.currentQuestion1-1) == 5 then
+        div [] []
+    else 
+        Button.button [(checkIfSelected1 model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion1-1) (Array.fromList (questionNotifications1)))) 3) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion1-1) (Array.fromList(questionOptions1)))))))]
+
+
+
+
+-- ##### Step 1 : Copy paste the below comment, and find "&" and replace it with a number #####
+{--
+
+-- ##### Paste this in "type alias Model{}"
+
+    , question1& : Int
+    , question2& : Int
+    , question3& : Int
+    , question4& : Int
+    , question5& : Int
+    , currentQuestion&: Int
+    , enableNextQuestion&: Bool
+    , enablePreviousQuestion&: Bool
+    , showHintEnabled& : Bool
+
+-- ##### Paste this in "init flags url key, (model, urlCmd)"
+
+currentQuestion& = 1, question1& = -1, question2& = -1 , question3& = -1 , question4& = -1 ,question5& = -1, enableNextQuestion&=False, enablePreviousQuestion&=False, showHintEnabled&=False
+
+-- ##### Paste this in "type Msg"
+
+    | Question1& Int
+    | Question2& Int
+    | Question3& Int
+    | Question4& Int
+    | Question5& Int
+    | LoadPreviousQuestion&
+    | LoadNextQuestion&
+    | ShowHintForQuestion&
+
+
+-- ##### Paste this in "update msg model"
+
+        LoadNextQuestion& ->
+            ( { model | showHintEnabled&=False, enableNextQuestion& = (fromJustInt (Array.get (model.currentQuestion&) (Array.fromList (questionsAnswers& model))) == 1), currentQuestion& = (model.currentQuestion& + 1), enablePreviousQuestion& = (if model.currentQuestion& > 0 then True else False) }
+            , Cmd.none
+            )
+        LoadPreviousQuestion& ->
+            ( { model |currentQuestion& = model.currentQuestion&-1, showHintEnabled& = False, enablePreviousQuestion&= (if model.currentQuestion& > 2 then True else False), enableNextQuestion& = True }
+            , Cmd.none
+            )
+
+        Question1& value ->
+            ( { model | question1& = value, enableNextQuestion& = (checkIfCorrectAnswer 1 value)}
+            , Cmd.none
+            )
+
+        Question2& value ->
+            ( { model | question2& = value, enableNextQuestion& = (checkIfCorrectAnswer 2 value) }
+            , Cmd.none
+            )
+
+        Question3& value ->
+            ( { model | question3& = value, enableNextQuestion& = (checkIfCorrectAnswer 3 value) }
+            , Cmd.none
+            )
+
+        Question4& value ->
+            ( { model | question4& = value, enableNextQuestion& = (checkIfCorrectAnswer 4 value) }
+            , Cmd.none
+            )
+
+        Question5& value ->
+            ( { model | question5& = value, enableNextQuestion& = (checkIfCorrectAnswer 5 value) }
+            , Cmd.none
+            )    
+
+        ShowHintForQuestion& -> 
+            ({ model | showHintEnabled& = not (model.showHintEnabled&) }
+            , Cmd.none
+            )
+
+
+    questionsAnswers& model = [model.question1&, model.question2&, model.question3&, model.question4&, model.question5&]
+
+
+--}
+
+{-- 
+-- ##### Step 2 : To create more questions,replace the "&" like before this and copy paste this code #####
+
+questionsAnswers& model = [model.question1&, model.question2&, model.question3&, model.question4&, model.question5&]
+questions& = ["q1","q2","q3","q4","q5"]
+questOneOptions& = ["op1","op1","op1"]
+questTwoOptions& = ["op2","op2","op2"]
+questThreeOptions& = ["op3","op3","op3"]
+questFourOptions& = ["op4","op4","op4"]
+questFiveOptions& =["op5","op5","op5"]
+questionOptions& = [questOneOptions&, questTwoOptions&, questThreeOptions&, questFourOptions&, questFiveOptions&]
+hints& = ["h1","h2","h3","h4","h5"]
+questionNotifications& = [Question1&, Question2&, Question3&, Question4&, Question5&]
+
+questionFeedback& : Model -> Html Msg
+questionFeedback& model = 
+    if (fromJustInt (Array.get (model.currentQuestion&-1) (Array.fromList (questionsAnswers& model)))) == 1 then
+        Alert.simpleSuccess [] [ text "Correct!" ]
+    else if (fromJustInt (Array.get (model.currentQuestion&-1) (Array.fromList (questionsAnswers& model)))) ==2  ||  
+            (fromJustInt (Array.get (model.currentQuestion&-1) (Array.fromList (questionsAnswers& model)))) ==3 then
+        Alert.simpleDanger  [] [ text "Incorrect"]
+    else 
+        div [] []
+
+isLastQuestion& model = 
+    if (model.currentQuestion& == 6) then 
+        True 
+    else 
+        False 
+
+showHint& model = 
+    if model.showHintEnabled& == True then 
+        Alert.simpleWarning [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (model.currentQuestion&-1) (Array.fromList(hints&)))) ]
+    else
+        div [] []
+
+checkIfSelected& model number = 
+    if fromJustInt (Array.get (model.currentQuestion&-1) (Array.fromList (questionsAnswers& model))) == number then 
+        Button.primary 
+    else 
+        Button.outlinePrimary
+
+renderOption1&: Model -> Html Msg
+renderOption1& model = 
+    if (model.currentQuestion&-1) == 5 then
+        div [] []
+    else
+        Button.button [(checkIfSelected& model 1), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion&-1) (Array.fromList (questionNotifications&)))) 1) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (0) (Array.fromList(fromJustList(Array.get (model.currentQuestion&-1) (Array.fromList(questionOptions&))))))) ]
+        
+
+renderOption2&: Model -> Html Msg
+renderOption2& model = 
+    if (model.currentQuestion&-1) == 5 then
+        div [] []
+    else 
+        Button.button [(checkIfSelected& model 2), Button.attrs [ onClick ((fromJustMsg(Array.get (model.currentQuestion&-1) (Array.fromList (questionNotifications&)))) 2 ) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (1) (Array.fromList(fromJustList(Array.get (model.currentQuestion&-1) (Array.fromList(questionOptions&)))))))]
+
+renderOption3&: Model -> Html Msg
+renderOption3& model = 
+    if (model.currentQuestion&-1) == 5 then
+        div [] []
+    else 
+        Button.button [(checkIfSelected& model 3), Button.attrs [ onClick ((fromJustMsg (Array.get (model.currentQuestion&-1) (Array.fromList (questionNotifications&)))) 3) ] ] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust(Array.get (2) (Array.fromList(fromJustList(Array.get (model.currentQuestion&-1) (Array.fromList(questionOptions&)))))))]
+
+uSubstitutionPage : Model -> List (Html Msg)
+uSubstitutionPage model =
+    [ h1 [] [ text "Let's work through an example..." ]
+    , h2 [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath "$f(x) =  \\int cos(7x+5) dx $" ]
+    , Grid.row []
+        [ Grid.col []
+            [ Card.config [ Card.outlinePrimary ]
+                |> Card.headerH4 [] [ (text (fromJust (Array.get (model.currentQuestion&-1) (Array.fromList questionLabels)))) ]
+                |> Card.block []
+                    [ Block.text [] [ Markdown.Elm.toHtml Markdown.Option.ExtendedMath (fromJust (Array.get (model.currentQuestion&-1) (Array.fromList questions&))) ]
+                    , Block.custom <| (renderOption1& model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (renderOption2& model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (renderOption3& model)
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (questionFeedback& model) 
+                    , Block.text [] [ text "" ]
+                    , Block.custom <| (showHint& model)]
+                |> Card.block [ Block.align Text.alignXsCenter ] 
+                    [
+                     Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enablePreviousQuestion&)), Button.attrs [Spacing.mr5, onClick (LoadPreviousQuestion&)] ] [text "Previous question"]
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (isLastQuestion& model), Button.attrs [Spacing.ml5,Spacing.mr5, onClick (ShowHintForQuestion&)] ] [text "Hint"]
+                     , Block.custom <| Button.button [Button.outlinePrimary, Button.disabled (not(model.enableNextQuestion&)), Button.attrs [ Spacing.ml5, onClick (LoadNextQuestion&)] ] [text "Next question"]
+                    ]
+                |> Card.view
+            ]
+        ]
+    , br [] []
+    ]
+
+--}
+
+
 
 pageGettingStarted : Model -> List (Html Msg)
 pageGettingStarted model =
@@ -417,11 +752,6 @@ pageModules model =
         ]
     ]
 --}
-
-uSubstitutionPage : Model -> List (Html Msg)
-uSubstitutionPage model =
-    [ h1 [] [ text "uSubstitution" ]
-    ]
 
 partialFractionDecompPage : Model -> List (Html Msg)
 partialFractionDecompPage model =
