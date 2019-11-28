@@ -12605,7 +12605,7 @@ var author$project$Main$questionFeedback1 = function (model) {
 			])) : A2(elm$html$Html$div, _List_Nil, _List_Nil));
 };
 var author$project$Main$questions1 = _List_fromArray(
-	['q1', 'q2', 'q3', 'q4', 'q5']);
+	['What values can you choose for $u$', 'what is the value of dx', 'Upon substituting $u$ and $du$, what is the integral that you get', 'What is the integrated value in terms of $u$', 'What is the integrated value in terms of $x$']);
 var author$project$Main$checkIfSelected1 = F2(
 	function (model, number) {
 		return _Utils_eq(
@@ -12635,15 +12635,15 @@ var author$project$Main$Question51 = function (a) {
 var author$project$Main$questionNotifications1 = _List_fromArray(
 	[author$project$Main$Question11, author$project$Main$Question21, author$project$Main$Question31, author$project$Main$Question41, author$project$Main$Question51]);
 var author$project$Main$questFiveOptions1 = _List_fromArray(
-	['op5', 'op5', 'op5']);
+	[' $\\frac{1}{7} sin(7*x+5) + C$', '$\\frac{1}{7} cos(7*x+5) + C$', '$\\frac{1}{5} tan(7*x+5) + C$']);
 var author$project$Main$questFourOptions1 = _List_fromArray(
-	['op4', 'op4', 'op4']);
+	['1/7 sin(u) + C', '1/7 cos(u) + C', '1/5 tan(u) + C']);
 var author$project$Main$questOneOptions1 = _List_fromArray(
-	['op1', 'op1', 'op1']);
+	['u $= 7x + 5$', 'u $= cos(7x+5)$', 'u $= 7x$']);
 var author$project$Main$questThreeOptions1 = _List_fromArray(
-	['op3', 'op3', 'op3']);
+	['$\\int cos(u) * \\frac{1}{7}$ du', '$\\int sin(u) * \\frac{1}{7}$ du', '$\\int cos(u) * \\frac{1}{5}$ du']);
 var author$project$Main$questTwoOptions1 = _List_fromArray(
-	['op2', 'op2', 'op2']);
+	['$\\frac{1}{7} du $', '$sin(x)$', '$\\frac{1}{5} du$']);
 var author$project$Main$questionOptions1 = _List_fromArray(
 	[author$project$Main$questOneOptions1, author$project$Main$questTwoOptions1, author$project$Main$questThreeOptions1, author$project$Main$questFourOptions1, author$project$Main$questFiveOptions1]);
 var author$project$Main$renderOption11 = function (model) {
@@ -12749,7 +12749,7 @@ var author$project$Main$renderOption31 = function (model) {
 			]));
 };
 var author$project$Main$hints1 = _List_fromArray(
-	['h1', 'h2', 'h3', 'h4', 'h5']);
+	['Hint 1', 'Hint 2', 'Hint 3', 'Hint 4', 'Hint 5']);
 var author$project$Main$showHint1 = function (model) {
 	return model.showHintEnabled1 ? A2(
 		rundis$elm_bootstrap$Bootstrap$Alert$simpleWarning,

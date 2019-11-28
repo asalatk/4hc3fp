@@ -488,14 +488,14 @@ uSubstitutionPage model =
     ]
 
 questionsAnswers1 model = [model.question11, model.question21, model.question31, model.question41, model.question51]
-questions1 = ["q1","q2","q3","q4","q5"]
-questOneOptions1 = ["op1","op1","op1"]
-questTwoOptions1 = ["op2","op2","op2"]
-questThreeOptions1 = ["op3","op3","op3"]
-questFourOptions1 = ["op4","op4","op4"]
-questFiveOptions1 =["op5","op5","op5"]
+questions1 = ["What values can you choose for $u$","what is the value of dx","Upon substituting $u$ and $du$, what is the integral that you get","What is the integrated value in terms of $u$","What is the integrated value in terms of $x$"]
+questOneOptions1 = ["u $= 7x + 5$","u $= cos(7x+5)$","u $= 7x$"]
+questTwoOptions1 = ["$\\frac{1}{7} du $","$sin(x)$","$\\frac{1}{5} du$"]
+questThreeOptions1 = ["$\\int cos(u) * \\frac{1}{7}$ du","$\\int sin(u) * \\frac{1}{7}$ du","$\\int cos(u) * \\frac{1}{5}$ du"]
+questFourOptions1 = ["1/7 sin(u) + C","1/7 cos(u) + C","1/5 tan(u) + C"]
+questFiveOptions1 =[" $\\frac{1}{7} sin(7*x+5) + C$","$\\frac{1}{7} cos(7*x+5) + C$","$\\frac{1}{5} tan(7*x+5) + C$"]
 questionOptions1 = [questOneOptions1, questTwoOptions1, questThreeOptions1, questFourOptions1, questFiveOptions1]
-hints1 = ["h1","h2","h3","h4","h5"]
+hints1 = ["Hint 1","Hint 2","Hint 3","Hint 4","Hint 5"]
 questionNotifications1 = [Question11, Question21, Question31, Question41, Question51]
 
 questionFeedback1 : Model -> Html Msg
