@@ -108,8 +108,6 @@ type Msg
     | Question3 Int
     | Question4 Int
     | Question5 Int
-    | UpdateLastSubmittedAnswer Int
-    | UpdateQuestion Int
     | EnableNextQuestion Bool
     | EnablePreviousQuestion Bool
     | LoadPreviousQuestion
@@ -141,40 +139,30 @@ update msg model =
             )
 
         Question1 value ->
-            ( { model | question1 = value, enableNextQuestion = (checkIfCorrectAnswer 1 value) }
+            ( { model | question1 = value, enableNextQuestion = (checkIfCorrectAnswer value) }
             , Cmd.none
             )
 
         Question2 value ->
-            ( { model | question2 = value, enableNextQuestion = (checkIfCorrectAnswer 2 value) }
+            ( { model | question2 = value, enableNextQuestion = (checkIfCorrectAnswer value) }
             , Cmd.none
             )
 
         Question3 value ->
-            ( { model | question3 = value, enableNextQuestion = (checkIfCorrectAnswer 3 value) }
+            ( { model | question3 = value, enableNextQuestion = (checkIfCorrectAnswer value) }
             , Cmd.none
             )
 
         Question4 value ->
-            ( { model | question4 = value, enableNextQuestion = (checkIfCorrectAnswer 4 value) }
+            ( { model | question4 = value, enableNextQuestion = (checkIfCorrectAnswer value) }
             , Cmd.none
             )
 
         Question5 value ->
-            ( { model | question5 = value, enableNextQuestion = (checkIfCorrectAnswer 5 value) }
+            ( { model | question5 = value, enableNextQuestion = (checkIfCorrectAnswer value) }
             , Cmd.none
             )
-
-        UpdateLastSubmittedAnswer answer -> 
-            ( { model | lastSubmittedAnswer = answer}
-            , Cmd.none
-            )
-
-        UpdateQuestion qNum -> 
-            ( { model | currentQuestion = qNum}
-            , Cmd.none
-            )
-   
+ 
         EnableNextQuestion value ->
             ( { model | enableNextQuestion = value }
             , Cmd.none
@@ -340,7 +328,7 @@ fromJustList x =
         Just (xs :: ys :: zz) -> [xs]++[ys]++zz
 
 -- Function that checks the Correct answer for the given question
-checkIfCorrectAnswer quNumber value = 
+checkIfCorrectAnswer value = 
     if value == 1 then 
         True
     else

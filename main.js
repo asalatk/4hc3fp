@@ -6725,10 +6725,9 @@ var rundis$elm_bootstrap$Bootstrap$Navbar$subscriptions = F2(
 var author$project$Main$subscriptions = function (model) {
 	return A2(rundis$elm_bootstrap$Bootstrap$Navbar$subscriptions, model.navState, author$project$Main$NavMsg);
 };
-var author$project$Main$checkIfCorrectAnswer = F2(
-	function (quNumber, value) {
-		return (value === 1) ? true : false;
-	});
+var author$project$Main$checkIfCorrectAnswer = function (value) {
+	return (value === 1) ? true : false;
+};
 var author$project$Main$fromJustInt = function (x) {
 	if (x.$ === 'Just') {
 		var y = x.a;
@@ -6900,7 +6899,7 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							enableNextQuestion: A2(author$project$Main$checkIfCorrectAnswer, 1, value),
+							enableNextQuestion: author$project$Main$checkIfCorrectAnswer(value),
 							question1: value
 						}),
 					elm$core$Platform$Cmd$none);
@@ -6910,7 +6909,7 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							enableNextQuestion: A2(author$project$Main$checkIfCorrectAnswer, 2, value),
+							enableNextQuestion: author$project$Main$checkIfCorrectAnswer(value),
 							question2: value
 						}),
 					elm$core$Platform$Cmd$none);
@@ -6920,7 +6919,7 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							enableNextQuestion: A2(author$project$Main$checkIfCorrectAnswer, 3, value),
+							enableNextQuestion: author$project$Main$checkIfCorrectAnswer(value),
 							question3: value
 						}),
 					elm$core$Platform$Cmd$none);
@@ -6930,7 +6929,7 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							enableNextQuestion: A2(author$project$Main$checkIfCorrectAnswer, 4, value),
+							enableNextQuestion: author$project$Main$checkIfCorrectAnswer(value),
 							question4: value
 						}),
 					elm$core$Platform$Cmd$none);
@@ -6940,23 +6939,9 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							enableNextQuestion: A2(author$project$Main$checkIfCorrectAnswer, 5, value),
+							enableNextQuestion: author$project$Main$checkIfCorrectAnswer(value),
 							question5: value
 						}),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateLastSubmittedAnswer':
-				var answer = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{lastSubmittedAnswer: answer}),
-					elm$core$Platform$Cmd$none);
-			case 'UpdateQuestion':
-				var qNum = msg.a;
-				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{currentQuestion: qNum}),
 					elm$core$Platform$Cmd$none);
 			case 'EnableNextQuestion':
 				var value = msg.a;
